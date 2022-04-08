@@ -25,8 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
-lateinit var mGoogleSignInClient:GoogleSignInClient
+lateinit var mGoogleSignInClient: GoogleSignInClient
 var eb = "e"
 
 class MainActivity : AppCompatActivity() {
@@ -40,19 +39,16 @@ class MainActivity : AppCompatActivity() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         login()
-
     }
 
     override fun onStart() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(this)
-
     }
 
-    fun login(){
+    fun login() {
         val signInIntent: Intent = mGoogleSignInClient.getSignInIntent()
         startActivityForResult(signInIntent, 1)
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -70,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)
 
             // Signed in successfully, show authenticated UI.
-            Log.w("Success","${account.displayName}")
+            Log.w("Success", "${account.displayName}")
             startreading()
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
@@ -79,8 +75,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun startreading(){
+    fun startreading() {
 
         val credential = GoogleAccountCredential.usingOAuth2(
             applicationContext, listOf(GmailScopes.GMAIL_READONLY)
@@ -88,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             .setBackOff(ExponentialBackOff())
             .setSelectedAccount(
                 Account(
-                    GoogleSignIn.getLastSignedInAccount(this)!!.email,"Dr.Delivery"
+                    GoogleSignIn.getLastSignedInAccount(this)!!.email, "Dr.Delivery"
 
                 )
             )
@@ -100,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         GlobalScope.launch {
-            //do the reading
+            // do the reading
             try {
                 val executeResult: ListMessagesResponse? =
                     withContext(Dispatchers.IO) {
@@ -108,37 +103,33 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 // For the sake of test, let's get 1st message on the list
-             //   val message: Message? = executeResult?.messages?.get(0)
+                //   val message: Message? = executeResult?.messages?.get(0)
 
                 // Actual reading of the message, by message ID
                 val messageRead = withContext(Dispatchers.IO) {
-                    service.users().messages().list(GoogleSignIn.getLastSignedInAccount(this@MainActivity)!!.email).
-                    setQ("from:info@net.shiprocket.in").
-                        execute()
+                    service.users().messages().list(GoogleSignIn.getLastSignedInAccount(this@MainActivity)!!.email)
+                        .setQ("from:info@net.shiprocket.in")
+                        .execute()
                     //  ?.get(GoogleSignIn.getLastSignedInAccount(this@MainActivity)!!.email, message?.id)
-
                 }
 
-             for (message in   messageRead.messages){
+                for (message in messageRead.messages) {
 
-                 var messageR = withContext(Dispatchers.IO) {
-                     service.users().messages()
-                         ?.get(GoogleSignIn.getLastSignedInAccount(this@MainActivity)!!.email, message?.id)
-                         ?.setFormat("full")?.execute()
-
-                 }
-                 Log.d("Email","Email"+ messageR?.payload?.body!!.data)
-
-             }
+                    var messageR = withContext(Dispatchers.IO) {
+                        service.users().messages()
+                            ?.get(GoogleSignIn.getLastSignedInAccount(this@MainActivity)!!.email, message?.id)
+                            ?.setFormat("full")?.execute()
+                    }
+                    Log.d("Email", "Email" + messageR?.payload?.body!!.data)
+                }
 //                val email = StringUtils.newStringUtf8(Base64.decodeBase64(messageRead?.payload?.parts?.get(0)?.body?.data))
 //                Log.d("Email", "TEST"+ StringUtils.newStringUtf8(Base64.decodeBase64 (messageRead?.raw.)))
                 // At this point you can get to short version of your message body as messageRead?.snippet
             } catch (e: UserRecoverableAuthIOException) {
-                startActivityForResult(e.intent, 1);
+                startActivityForResult(e.intent, 1)
             }
         }
     }
 
-    //Do the reading the stuff
-
+    // Do the reading the stuff
 }
