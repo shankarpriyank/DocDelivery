@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Running git pre-commit hook"
+
+./gradlew app:ktlintCheck --daemon
+
+STATUS=$?
+
+[ $STATUS -eq 0 ] && exit 0
+
+echo "ktlintCheck found some errors"
+echo
+echo "Try ktlintFormat to auto-correct"
+
+exit 1
