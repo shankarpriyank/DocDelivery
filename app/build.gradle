@@ -49,6 +49,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+
 }
 
 dependencies {
@@ -69,7 +70,7 @@ dependencies {
     //gmail
     implementation 'com.google.apis:google-api-services-gmail:v1-rev24-1.19.1'
 
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
     implementation('com.google.api-client:google-api-client-android:1.30.9') {
         exclude group: 'org.apache.httpcomponents'
     }
@@ -82,11 +83,11 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:0.15.0"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.15.0"
 
-    implementation "androidx.navigation:navigation-compose:2.5.0-alpha04"
+    implementation "androidx.navigation:navigation-compose:2.5.0-rc02"
 
     // Compose dependencies
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha06"
-    implementation "androidx.navigation:navigation-compose:2.5.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-rc02"
+    implementation "androidx.navigation:navigation-compose:2.5.0-rc02"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
@@ -108,7 +109,11 @@ dependencies {
     implementation "androidx.room:room-ktx:2.4.2"
 
 
+
+
 }
+
+
 
 task installGitHook(type: Copy) {
     from new File(rootProject.rootDir, 'scripts/pre-commit')
