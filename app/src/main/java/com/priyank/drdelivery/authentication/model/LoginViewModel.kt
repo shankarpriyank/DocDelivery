@@ -8,13 +8,14 @@ class LoginViewModel : ViewModel() {
 
         return listOf(
             Info(
-                "Auto-track orders with email sync", R.drawable.autotrack
+                "Auto-track orders with \n email sync", R.drawable.ic_autotrack
             ),
             Info(
-                "Get Realtime Delivery Updates", R.drawable.realtime
+                "Get Realtime Delivery Updates", R.drawable.ic_realtime
             ),
             Info(
-                "Your Data is safe, we do everything on the device itself", R.drawable.privacy
+                "Your Data is safe, we do everything on the device itself",
+                R.drawable.ic_privacy_png
             )
 
         )

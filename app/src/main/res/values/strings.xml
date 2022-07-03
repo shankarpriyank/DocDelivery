@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Dr.Delivery</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="gcp_credentials">73928891209-gm8gv5b3t8tufk7ufr3fremoafduh5os.apps.googleusercontent.com</string>
 </resources>
