@@ -44,8 +44,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Run Debug ktlint
-        run: ./gradlew ktlintDebugCheck --continue
+      - name: Run ktlint check
+        run: ./gradlew ktlintCheck --continue
 
       - name: Upload ktlint Reports
         if: ${{ always() }}
