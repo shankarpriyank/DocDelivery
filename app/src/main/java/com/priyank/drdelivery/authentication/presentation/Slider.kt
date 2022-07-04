@@ -1,4 +1,4 @@
-package com.priyank.drdelivery.authentication.ui
+package com.priyank.drdelivery.authentication.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

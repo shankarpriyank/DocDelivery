@@ -1,6 +1,5 @@
-package com.priyank.drdelivery.authentication.ui
+package com.priyank.drdelivery.authentication.presentation
 
-import android.content.Context
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -28,8 +27,7 @@ import com.priyank.drdelivery.ui.theme.Shapes
 
 @Composable
 fun SignInButton(
-    context: Context,
-    modifier: Modifier,
+    onClick: () -> Unit,
     text: String,
     loadingText: String = "Signing in...",
     icon: Painter,
@@ -41,9 +39,8 @@ fun SignInButton(
 
 ) {
     Surface(
-        modifier = Modifier.clickable(
-            enabled = !isLoading,
-            onClick = {}
+        Modifier.clickable(
+            onClick = onClick
         ),
         shape = shape,
         border = BorderStroke(width = 1.dp, color = borderColor),
