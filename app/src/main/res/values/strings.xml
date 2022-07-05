@@ -3,4 +3,5 @@
   <string name="title_activity_login">LoginActivity</string>
   <string name="gcp_credentials">73928891209-gm8gv5b3t8tufk7ufr3fremoafduh5os.apps.googleusercontent.com</string>
   <string name="title_activity_shipment_details">ShipmentDetailsActivity</string>
+  <string name="title_activity_main">MainActivity</string>
 </resources>

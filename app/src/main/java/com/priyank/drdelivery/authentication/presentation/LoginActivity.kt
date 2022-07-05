@@ -17,13 +17,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -63,9 +64,12 @@ class LoginActivity : ComponentActivity() {
 @Composable
 fun LoginUi(viewModel: LoginViewModel = hiltViewModel()) {
     val context = LocalContext.current
-    val openShipmentDetailsPage = viewModel.triggerEvent.observeAsState(initial = false)
-    val signInRequestCode = 1
+    val intent = Intent(context, ShipmentDetailsActivity::class.java)
+    if (viewModel.navigate.collectAsState().value) {
+        startActivity(context, intent, null)
+    }
 
+    val signInRequestCode = 1
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
             try {
@@ -119,9 +123,6 @@ fun LoginUi(viewModel: LoginViewModel = hiltViewModel()) {
                         )
                     )
                 }
-            }
-            if (openShipmentDetailsPage.value) {
-                context.startActivity(Intent(context, ShipmentDetailsActivity::class.java))
             }
         }
 

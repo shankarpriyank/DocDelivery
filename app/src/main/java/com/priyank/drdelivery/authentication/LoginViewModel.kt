@@ -1,13 +1,16 @@
 package com.priyank.drdelivery.authentication
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.model.Info
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,8 +20,15 @@ constructor(
     private val gsa: GoogleSignInAccount?
 ) : ViewModel() {
 
-    private val _triggerevent = MutableLiveData(false)
-    val triggerEvent: LiveData<Boolean> = _triggerevent
+    private val _isUserLoggedIn = MutableStateFlow(false)
+    val isUserLoggedIn = _isUserLoggedIn.asStateFlow()
+
+    private val _navigate = MutableStateFlow(false)
+    val navigate = _navigate.asStateFlow()
+
+    init {
+    }
+
     fun data(): List<Info> {
 
         return listOf(
@@ -35,8 +45,6 @@ constructor(
 
         )
     }
-    fun signIn() {
-    }
 
     init {
         checkSignedInUser()
@@ -48,12 +56,28 @@ constructor(
         editor.putString("userEmail", email)
         editor.putString("userImageUrl", profilePhotoUrl)
         editor.apply()
-        _triggerevent.value = true
+        Log.e("Name", gsa?.displayName.toString())
+        Log.e("Email", gsa?.email.toString())
+        Log.e("Url", gsa?.photoUrl.toString())
+        viewModelScope.launch {
+            _navigate.emit(true)
+        }
     }
 
     private fun checkSignedInUser() {
         if (gsa != null) {
-            _triggerevent.value = true
+            viewModelScope.launch {
+                _isUserLoggedIn.emit(true)
+            }
+
+            Log.e("name", gsa.displayName.toString())
+            Log.e("email", gsa.email.toString())
+            Log.e("url", gsa.photoUrl.toString())
+        } else {
+            viewModelScope.launch {
+                _isUserLoggedIn.emit(false)
+            }
+            Log.e("No user", "Hey")
         }
     }
 }
