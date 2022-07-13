@@ -3,29 +3,7 @@ package com.priyank.drdelivery.authentication
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.priyank.drdelivery.R
-import com.priyank.drdelivery.authentication.model.Info
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-@HiltViewModel
-class LoginViewModel @Inject
-constructor(
-    private val sharedPreferences: SharedPreferences,
-    private val gsa: GoogleSignInAccount?
-) : ViewModel() {
-    private val _navigateToShipmentScreen = MutableStateFlow(false)
-    val navigateToShipmentScreen = _navigateToShipmentScreen.asStateFlow()
-
-    fun data(): List<Info> {
-
-        return listOf(
-            Info(
+import androsesdfgasdf
                 "Auto-track orders with \n email sync", R.drawable.ic_autotrack
             ),
             Info(
