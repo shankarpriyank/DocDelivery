@@ -1,31 +1,23 @@
 package com.priyank.drdelivery.authentication.presentation
 
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -34,39 +26,17 @@ import com.google.android.gms.common.api.ApiException
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.GoogleApiContract
 import com.priyank.drdelivery.authentication.LoginViewModel
-import com.priyank.drdelivery.feature_track_pacakges.presentation.ShipmentDetailsActivity
-import com.priyank.drdelivery.ui.theme.DrDeliveryTheme
+import com.priyank.drdelivery.navigation.Screen
 import com.priyank.drdelivery.ui.theme.LightBlue
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
-class LoginActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            DrDeliveryTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-
-                    LoginUi()
-                }
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun LoginUi(viewModel: LoginViewModel = hiltViewModel()) {
-    val context = LocalContext.current
-    val intent = Intent(context, ShipmentDetailsActivity::class.java)
-    if (viewModel.navigate.collectAsState().value) {
-        startActivity(context, intent, null)
+fun AuthenticationScreen(viewModel: LoginViewModel = hiltViewModel(), navHostController: NavHostController) {
+    if (viewModel.navigateToShipmentScreen.collectAsState().value) {
+        navHostController.popBackStack()
+        navHostController.navigate(Screen.ShipmentDetail.route)
     }
 
     val signInRequestCode = 1
@@ -82,6 +52,8 @@ fun LoginUi(viewModel: LoginViewModel = hiltViewModel()) {
                         profilePhotoUrl = gsa.photoUrl.toString()
                     )
                 } else {
+
+                    Log.e("Login Failed", gsa!!)
                 }
             } catch (e: ApiException) {
                 Log.e("Error in AuthScreen%s", e.toString())

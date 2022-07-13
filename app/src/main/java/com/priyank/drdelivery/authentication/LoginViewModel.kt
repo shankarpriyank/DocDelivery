@@ -19,15 +19,8 @@ constructor(
     private val sharedPreferences: SharedPreferences,
     private val gsa: GoogleSignInAccount?
 ) : ViewModel() {
-
-    private val _isUserLoggedIn = MutableStateFlow(false)
-    val isUserLoggedIn = _isUserLoggedIn.asStateFlow()
-
-    private val _navigate = MutableStateFlow(false)
-    val navigate = _navigate.asStateFlow()
-
-    init {
-    }
+    private val _navigateToShipmentScreen = MutableStateFlow(false)
+    val navigateToShipmentScreen = _navigateToShipmentScreen.asStateFlow()
 
     fun data(): List<Info> {
 
@@ -47,37 +40,21 @@ constructor(
     }
 
     init {
-        checkSignedInUser()
     }
 
     fun fetchSignInUser(email: String?, name: String?, profilePhotoUrl: String? = null) {
+        Log.e("Value Updated", "Yayy")
         val editor = sharedPreferences.edit()
         editor.putString("userName", name)
         editor.putString("userEmail", email)
         editor.putString("userImageUrl", profilePhotoUrl)
+        editor.putBoolean("Logged In", true)
         editor.apply()
-        Log.e("Name", gsa?.displayName.toString())
-        Log.e("Email", gsa?.email.toString())
-        Log.e("Url", gsa?.photoUrl.toString())
+        Log.e("Name", name.toString())
+        Log.e("Email", email.toString())
+        Log.e("Url", profilePhotoUrl.toString())
         viewModelScope.launch {
-            _navigate.emit(true)
-        }
-    }
-
-    private fun checkSignedInUser() {
-        if (gsa != null) {
-            viewModelScope.launch {
-                _isUserLoggedIn.emit(true)
-            }
-
-            Log.e("name", gsa.displayName.toString())
-            Log.e("email", gsa.email.toString())
-            Log.e("url", gsa.photoUrl.toString())
-        } else {
-            viewModelScope.launch {
-                _isUserLoggedIn.emit(false)
-            }
-            Log.e("No user", "Hey")
+            _navigateToShipmentScreen.emit(true)
         }
     }
 }
