@@ -53,9 +53,10 @@ android {
 
 
     lintOptions {
+        abortOnError false
         checkReleaseBuilds false
     }
-
+//8\
 }
 configurations {
     all {
