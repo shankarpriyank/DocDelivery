@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.priyank.drdelivery.authentication.presentation.AuthenticationScreen
 import com.priyank.drdelivery.feature_track_pacakges.presentation.Greeting
 
@@ -18,11 +17,10 @@ fun SetupNavGraph(
         startDestination = startDestination
     ) {
         composable(route = Screen.Authentication.route) {
-            val navController = rememberNavController()
             AuthenticationScreen(navHostController = navController)
         }
         composable(route = Screen.ShipmentDetail.route) {
-            Greeting()
+            Greeting(navHostController = navController)
         }
     }
 }

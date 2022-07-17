@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -26,19 +25,16 @@ import com.google.android.gms.common.api.ApiException
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.GoogleApiContract
 import com.priyank.drdelivery.authentication.LoginViewModel
-import com.priyank.drdelivery.navigation.Screen
 import com.priyank.drdelivery.ui.theme.LightBlue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun AuthenticationScreen(viewModel: LoginViewModel = hiltViewModel(), navHostController: NavHostController) {
-    if (viewModel.navigateToShipmentScreen.collectAsState().value) {
-        navHostController.popBackStack()
-        navHostController.navigate(Screen.ShipmentDetail.route)
-    }
-
+fun AuthenticationScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navHostController: NavHostController
+) {
     val signInRequestCode = 1
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
@@ -49,11 +45,11 @@ fun AuthenticationScreen(viewModel: LoginViewModel = hiltViewModel(), navHostCon
                     viewModel.fetchSignInUser(
                         email = gsa.email,
                         name = gsa.displayName,
-                        profilePhotoUrl = gsa.photoUrl.toString()
+                        profilePhotoUrl = gsa.photoUrl.toString(),
+                        navHostController = navHostController
                     )
                 } else {
-
-                    Log.e("Login Failed", gsa!!)
+                    Log.e("Login Failed", "Error")
                 }
             } catch (e: ApiException) {
                 Log.e("Error in AuthScreen%s", e.toString())
