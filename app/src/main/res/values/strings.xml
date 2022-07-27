@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Dr.Delivery</string>
+  <string name="app_name">DocDelivery</string>
   <string name="title_activity_login">LoginActivity</string>
 
   <!--Change this with your credentials, this credential is not valid just here for demonstration purpose -->
