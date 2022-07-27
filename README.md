@@ -1,5 +1,5 @@
-# Dr.Delivery
-[![CodeFactor](https://www.codefactor.io/repository/github/shankarpriyank/dr.delivery/badge/master)](https://www.codefactor.io/repository/github/shankarpriyank/dr.delivery/overview/master)
+# DocDelivery
+[![CodeFactor](https://www.codefactor.io/repository/github/shankarpriyank/docdelivery/badge)](https://www.codefactor.io/repository/github/shankarpriyank/docdelivery)
 [![Build](https://github.com/shankarpriyank/Dr.Delivery/actions/workflows/build.yml/badge.svg)](https://github.com/shankarpriyank/Dr.Delivery/actions/workflows/build.yml)
 
 
