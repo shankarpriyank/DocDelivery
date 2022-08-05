@@ -1,4 +1,4 @@
-package com.priyank.drdelivery.feature_track_pacakges
+package com.priyank.drdelivery.shipmentDetails
 
 import android.content.SharedPreferences
 import android.util.Log

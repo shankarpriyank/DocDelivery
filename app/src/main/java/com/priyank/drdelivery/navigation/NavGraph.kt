@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.priyank.drdelivery.authentication.presentation.AuthenticationScreen
-import com.priyank.drdelivery.feature_track_pacakges.presentation.Greeting
+import com.priyank.drdelivery.shipmentDetails.presentation.Greeting
 
 @Composable
 fun SetupNavGraph(
