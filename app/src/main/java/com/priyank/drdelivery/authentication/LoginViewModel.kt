@@ -53,6 +53,6 @@ constructor(
         Log.e("Email", email.toString())
         Log.e("Url", profilePhotoUrl.toString())
         navHostController.popBackStack()
-        navHostController.navigate(Screen.ShipmentDetail.route)
+        navHostController.navigate(Screen.Detail.route)
     }
 }

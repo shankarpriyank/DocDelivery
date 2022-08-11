@@ -71,8 +71,7 @@ fun AuthenticationScreen(
             HorizontalPagerIndicator(
                 pagerState = pagerState,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 700.dp),
+                    .align(Alignment.Center).padding(top = 700.dp),
                 indicatorShape = RectangleShape,
                 activeColor = LightBlue
             )

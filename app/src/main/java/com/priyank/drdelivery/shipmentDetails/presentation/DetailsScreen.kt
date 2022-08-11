@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.priyank.drdelivery.navigation.Screen
 import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
 import com.priyank.drdelivery.shipmentDetails.domain.BottomNavItem
@@ -17,13 +18,14 @@ fun Greeting(
     viewModel: TrackShipmentViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
+    val navControllerForBottomNav = rememberNavController()
 
     Scaffold(bottomBar = {
         BottomNavigationBar(
             items = listOf(
                 BottomNavItem(
                     name = "Home",
-                    route = "home",
+                    route = "tracking detail",
                     icon = Icons.Outlined.Home
                 ),
                 BottomNavItem(
@@ -32,12 +34,13 @@ fun Greeting(
                     icon = Icons.Outlined.Person
                 )
             ),
-            navController = navHostController,
+            navController = navControllerForBottomNav,
             onItemClick = {
-                // navHostController.navigate(it.route)
+                navControllerForBottomNav.navigate(it.route)
             }
         )
     }) {
+        Navigation(navController = navControllerForBottomNav)
     }
 
     fun signout() {

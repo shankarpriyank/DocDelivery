@@ -19,7 +19,7 @@ fun SetupNavGraph(
         composable(route = Screen.Authentication.route) {
             AuthenticationScreen(navHostController = navController)
         }
-        composable(route = Screen.ShipmentDetail.route) {
+        composable(route = Screen.Detail.route) {
             Greeting(navHostController = navController)
         }
     }

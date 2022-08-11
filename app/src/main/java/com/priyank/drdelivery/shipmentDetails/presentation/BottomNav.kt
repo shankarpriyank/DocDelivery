@@ -16,6 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.priyank.drdelivery.shipmentDetails.domain.BottomNavItem
 
@@ -30,7 +34,8 @@ fun BottomNavigationBar(
     BottomNavigation(
         modifier = modifier,
         backgroundColor = White,
-        elevation = 5.dp
+        elevation = 5.dp,
+        contentColor = Blue
     ) {
         items.forEach { item ->
             val selected = item.route == backStackEntry.value?.destination?.route
@@ -68,6 +73,18 @@ fun BottomNavigationBar(
                     }
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun Navigation(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "profile") {
+        composable("tracking detail") {
+            TrackingDetailScreen()
+        }
+        composable("profile") {
+            ProfileScreen()
         }
     }
 }

@@ -28,7 +28,7 @@ constructor(
 
             if (isUserLoggedIn) {
                 Log.e("Valye", isUserLoggedIn.toString())
-                _startDestination.value = Screen.ShipmentDetail.route
+                _startDestination.value = Screen.Detail.route
             } else {
                 Log.e("Valye", isUserLoggedIn.toString())
                 _startDestination.value = Screen.Authentication.route
