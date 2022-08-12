@@ -2,8 +2,8 @@
   <string name="app_name">DocDelivery</string>
   <string name="title_activity_login">LoginActivity</string>
 
-  <!--Change this with your credentials, this credential is not valid just here for demonstration purpose -->
-  <string name="gcp_credentials">73928891209-mfsg7fgcvcg7ea0880rd5rihs8jjp4u8.apps.googleusercontent.com</string>
+  <!--Change this with your API KEY -->
+  <string name="gcp_credentials">${{ secrets.API_KEY }}</string>
   <string name="title_activity_shipment_details">ShipmentDetailsActivity</string>
   <string name="title_activity_main">MainActivity</string>
 </resources>
