@@ -43,7 +43,8 @@ object MainModule {
     @Provides
     fun provideGoogleSigninClient(@ApplicationContext context: Context): GoogleSignInClient {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.gcp_credentials)).requestScopes(Scope("https://www.googleapis.com/auth/gmail.readonly"))
+            .requestIdToken(context.getString(R.string.gcp_credentials))
+            .requestScopes(Scope("https://www.googleapis.com/auth/gmail.readonly"))
             .requestEmail()
             .build()
         // Build a GoogleSignInClient with the options specified by gso.
