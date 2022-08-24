@@ -19,7 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class GetEmails {
-    // This function will be improvement in future I have just hacked my way around to make things work right now
+    // This function will be improved in future I have just hacked my way around to make things work right now
     suspend fun getEmails(
         applicationContext: Context,
         gsa: GoogleSignInAccount?
