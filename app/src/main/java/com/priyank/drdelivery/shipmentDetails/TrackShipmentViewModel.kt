@@ -37,21 +37,19 @@ constructor(
         return emails
     }
 
-    suspend fun call() {
+    fun call() {
 
         GlobalScope.launch {
             val emails = async { getEmails() }
-            for (i in 0 until emails.await().size) {
 
-                Log.i("Email no $i", emails.await()[i].snippet)
+            if (emails.await().isEmpty()) {
+                Log.i("Empty", "No Relevant Info Found")
+            } else {
+                for (i in 0 until emails.await().size) {
+
+                    Log.i("Email no $i", emails.await()[i].snippet)
+                }
             }
-        }
-    }
-
-    init {
-
-        GlobalScope.launch {
-            call()
         }
     }
 }

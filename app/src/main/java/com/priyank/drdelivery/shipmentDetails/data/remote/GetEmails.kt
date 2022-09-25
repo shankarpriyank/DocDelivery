@@ -19,7 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class GetEmails {
-    // This function will be improved in future I have just hacked my way around to make things work right now
+    // Todo: Optimise Later
     suspend fun getEmails(
         applicationContext: Context,
         gsa: GoogleSignInAccount?
@@ -45,10 +45,11 @@ class GetEmails {
             .build()
 
         val getEmailList = GlobalScope.launch {
+
             try {
                 emailList =
                     async {
-                        service.users().messages()?.list("me")?.execute()
+                        service.users().messages()?.list("me")?.setQ("Flipkart")?.execute()
                     }
             } catch (e: UserRecoverableAuthIOException) {
                 e.printStackTrace()
@@ -58,19 +59,19 @@ class GetEmails {
         getEmailList.join()
 
         val job = GlobalScope.launch(Dispatchers.IO) {
+            if (emailList.await().toString() != "{\"resultSizeEstimate\":0}") {
 
-            for (i in 0 until emailList.await()?.messages!!.size) {
-                val email =
-
-                    async {
-                        service.users().messages().get("me", emailList.await()!!.messages[i].id)
-                            .setFormat("Full").execute()
-                    }
-                messageList.add(email.await())
+                for (i in 0 until emailList.await()?.messages!!.size - 1) {
+                    val email =
+                        async {
+                            service.users().messages().get("me", emailList.await()!!.messages[i].id)
+                                .setFormat("Full").execute()
+                        }
+                    messageList.add(email.await())
+                }
             }
         }
 
-        getEmailList.join()
         job.join()
 
         return messageList
