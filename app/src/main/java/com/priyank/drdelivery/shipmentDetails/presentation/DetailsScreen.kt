@@ -46,6 +46,6 @@ fun Greeting(
     fun signout() {
         navHostController.navigate(Screen.Authentication.route)
         Log.e("Nav", "Nav")
-        viewModel.signout(navHostController)
+//        viewModel.signout(navHostController)
     }
 }

@@ -49,7 +49,7 @@ class GetEmails {
             try {
                 emailList =
                     async {
-                        service.users().messages()?.list("me")?.setQ("Flipkart")?.execute()
+                        service.users().messages()?.list("me")?.setQ("subject:shipped")?.execute()
                     }
             } catch (e: UserRecoverableAuthIOException) {
                 e.printStackTrace()

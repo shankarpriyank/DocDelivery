@@ -28,8 +28,8 @@ constructor(
         editor.putBoolean("Logged In", false)
         editor.apply()
         Log.e("Arey", sharedPreferences.getBoolean("Logged In", false).toString())
-        navHostController.popBackStack()
         navHostController.navigate(Screen.Authentication.route)
+        navHostController.popBackStack()
     }
 
     suspend fun getEmails(): List<Message> {

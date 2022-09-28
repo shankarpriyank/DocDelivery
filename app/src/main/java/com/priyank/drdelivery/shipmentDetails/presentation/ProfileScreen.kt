@@ -2,8 +2,10 @@ package com.priyank.drdelivery.shipmentDetails.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -11,15 +13,20 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LightGrey
 
 @Preview
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
+    val context = LocalContext.current
 
     Text(
         text = "Settings",
@@ -60,6 +67,16 @@ fun ProfileScreen() {
                 color = Color.Black, fontFamily = Lato,
                 fontSize = 18.sp,
                 text = "Sponsor/Donate"
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+
+        TextButton(onClick = { viewModel.signout(NavHostController(context)) }) {
+            Text(
+                modifier = Modifier.padding(start = 10.dp),
+                color = Color.Black, fontFamily = Lato,
+                fontSize = 18.sp,
+                text = "Sign Out"
             )
         }
     }
