@@ -22,7 +22,12 @@ constructor(
 ) : ViewModel() {
 
     suspend fun getEmails(): List<Message> {
-        val emails = GetEmails().getEmails(gsc.applicationContext, gsaa)
+
+        val emails = GetEmails().getEmails(
+            gsc.applicationContext,
+            sharedPreferences.getString("userId", "F"),
+            sharedPreferences.getString("userEmail", "F")
+        )
         return emails
     }
 

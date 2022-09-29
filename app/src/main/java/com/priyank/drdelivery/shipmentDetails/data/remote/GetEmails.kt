@@ -2,7 +2,6 @@ package com.priyank.drdelivery.shipmentDetails.data.remote
 
 import android.accounts.Account
 import android.content.Context
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.json.AndroidJsonFactory
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
@@ -22,7 +21,8 @@ class GetEmails {
     // Todo: Optimise Later
     suspend fun getEmails(
         applicationContext: Context,
-        gsa: GoogleSignInAccount?
+        id: String?,
+        email: String?
     ): List<Message> {
 
         val messageList: MutableList<Message> = mutableListOf()
@@ -33,7 +33,7 @@ class GetEmails {
             .setBackOff(ExponentialBackOff())
             .setSelectedAccount(
                 Account(
-                    gsa!!.email, "Dr.Delivery"
+                    email, "Dr.Delivery"
 
                 )
             )
@@ -49,7 +49,7 @@ class GetEmails {
             try {
                 emailList =
                     async {
-                        service.users().messages()?.list("me")?.setQ("subject:shipped")?.execute()
+                        service.users().messages()?.list(id)?.setQ("subject:shipped")?.execute()
                     }
             } catch (e: UserRecoverableAuthIOException) {
                 e.printStackTrace()

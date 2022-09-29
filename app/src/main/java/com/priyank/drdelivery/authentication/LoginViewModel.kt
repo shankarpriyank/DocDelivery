@@ -39,6 +39,7 @@ constructor(
     }
 
     fun fetchSignInUser(
+        id: String?,
         email: String?,
         name: String?,
         profilePhotoUrl: String? = null,
@@ -50,10 +51,12 @@ constructor(
         editor.putString("userEmail", email)
         editor.putString("userImageUrl", profilePhotoUrl)
         editor.putBoolean("Logged In", true)
+        editor.putString("userId", id)
         editor.apply()
-        Log.e("Name", name.toString())
-        Log.e("Email", email.toString())
-        Log.e("Url", profilePhotoUrl.toString())
+        Log.i("Name", name.toString())
+        Log.i("Email", email.toString())
+        Log.i("Url", profilePhotoUrl.toString())
+        Log.i("Id", id.toString())
         navHostController.popBackStack()
         navHostController.navigate(Screen.Detail.route)
     }

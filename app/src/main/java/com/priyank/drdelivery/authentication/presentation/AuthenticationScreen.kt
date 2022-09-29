@@ -44,6 +44,7 @@ fun AuthenticationScreen(
 
                 if (gsa != null) {
                     viewModel.fetchSignInUser(
+                        id = gsa.id,
                         email = gsa.email,
                         name = gsa.displayName,
                         profilePhotoUrl = gsa.photoUrl.toString(),

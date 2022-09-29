@@ -13,7 +13,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,8 +24,10 @@ import com.priyank.drdelivery.ui.theme.LightGrey
 
 @Composable
 
-fun ProfileScreen(viewModel: LoginViewModel = hiltViewModel(), navHostController: NavHostController) {
-    val context = LocalContext.current
+fun ProfileScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navHostController: NavHostController
+) {
 
     Text(
         text = "Settings",
@@ -71,7 +72,12 @@ fun ProfileScreen(viewModel: LoginViewModel = hiltViewModel(), navHostController
         }
         Spacer(modifier = Modifier.size(20.dp))
 
-        TextButton(onClick = { singout(navHostController = navHostController, viewModel = viewModel) }) {
+        TextButton(onClick = {
+            singout(
+                navHostController = navHostController,
+                viewModel = viewModel
+            )
+        }) {
             Text(
                 modifier = Modifier.padding(start = 10.dp),
                 color = Color.Black, fontFamily = Lato,
