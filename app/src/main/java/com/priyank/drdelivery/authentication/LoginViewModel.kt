@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.navigation.Screen
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject
 constructor(
     private val sharedPreferences: SharedPreferences,
+    private val gsc: GoogleSignInClient,
 ) : ViewModel() {
 
     fun data(): List<Info> {
@@ -54,5 +56,12 @@ constructor(
         Log.e("Url", profilePhotoUrl.toString())
         navHostController.popBackStack()
         navHostController.navigate(Screen.Detail.route)
+    }
+    fun signOutUser() {
+        Log.e("Signout", "Hogya")
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("Logged In", false)
+        editor.apply()
+        gsc.signOut()
     }
 }

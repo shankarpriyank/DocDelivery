@@ -25,6 +25,7 @@ import com.google.android.gms.common.api.ApiException
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.GoogleApiContract
 import com.priyank.drdelivery.authentication.LoginViewModel
+import com.priyank.drdelivery.ui.theme.DarkBlue
 import com.priyank.drdelivery.ui.theme.LightBlue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,11 +70,13 @@ fun AuthenticationScreen(
             Slider(info = viewModel.data()[page])
 
             HorizontalPagerIndicator(
+
                 pagerState = pagerState,
                 modifier = Modifier
-                    .align(Alignment.Center).padding(top = 700.dp),
+                    .align(Alignment.Center)
+                    .padding(top = 700.dp),
                 indicatorShape = RectangleShape,
-                activeColor = LightBlue
+                activeColor = DarkBlue, inactiveColor = LightBlue
             )
         }
         LaunchedEffect(key1 = pagerState.currentPage) {

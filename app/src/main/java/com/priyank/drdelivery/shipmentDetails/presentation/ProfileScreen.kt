@@ -14,18 +14,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
+import com.priyank.drdelivery.authentication.LoginViewModel
+import com.priyank.drdelivery.navigation.Screen
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LightGrey
 
-@Preview
 @Composable
-fun ProfileScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
+
+fun ProfileScreen(viewModel: LoginViewModel = hiltViewModel(), navHostController: NavHostController) {
     val context = LocalContext.current
 
     Text(
@@ -71,7 +72,7 @@ fun ProfileScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
         }
         Spacer(modifier = Modifier.size(20.dp))
 
-        TextButton(onClick = { viewModel.signout(NavHostController(context)) }) {
+        TextButton(onClick = { singout(navHostController = navHostController, viewModel = viewModel) }) {
             Text(
                 modifier = Modifier.padding(start = 10.dp),
                 color = Color.Black, fontFamily = Lato,
@@ -80,4 +81,11 @@ fun ProfileScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
             )
         }
     }
+}
+
+fun singout(navHostController: NavHostController, viewModel: LoginViewModel) {
+    navHostController.navigate(Screen.Authentication.route)
+    viewModel.signOutUser()
+    // navHostController.popBackStack()
+    // TODO restrict user from getting back to main screen after pressing back
 }
