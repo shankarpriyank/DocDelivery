@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.priyank.drdelivery.authentication.LoginViewModel
 import com.priyank.drdelivery.navigation.Screen
@@ -84,8 +83,10 @@ fun ProfileScreen(viewModel: LoginViewModel = hiltViewModel(), navHostController
 }
 
 fun singout(navHostController: NavHostController, viewModel: LoginViewModel) {
-    navHostController.navigate(Screen.Authentication.route)
+    navHostController.navigate(Screen.Authentication.route) {
+        popUpTo(Screen.Detail.route) {
+            inclusive = true
+        }
+    }
     viewModel.signOutUser()
-    // navHostController.popBackStack()
-    // TODO restrict user from getting back to main screen after pressing back
 }
