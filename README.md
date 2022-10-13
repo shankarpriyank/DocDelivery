@@ -4,7 +4,7 @@
 
  
 
-DocDelivery is package/delivery traking app which aims to minamize the efforts of the user to track his/her packages/deliveries
+DocDelivery is package/delivery traking app which aims to minimize the efforts of the user to track his/her packages/deliveries
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
