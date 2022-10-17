@@ -21,4 +21,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: '<h1>It''s great having you contribute to this project</h1> Welcome to the open-source world :nerd_face:'
           pr-message: '<h1>It''s great having you contribute to this project</h1> Welcome to the open-source world :nerd_face:'
-          footer: 'It is really good to see that you have taken out your precious time to contribute to this project. Communication is very important for open-source,please try to communicate well. Any questions?let me know!
+          footer: 'It is really good to see that you have taken out your precious time to contribute to this project. Communication is very important for open-source,please try to communicate well. Any questions?let me know!'
