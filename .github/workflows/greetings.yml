@@ -1,3 +1,4 @@
+name: Greetings
 on:
   branches: [ master ]
   issues:
