@@ -1,6 +1,5 @@
 name: Greetings
 on:
-  branches: [ master ]
   issues:
     types: [ opened ]
   issue_comment:
