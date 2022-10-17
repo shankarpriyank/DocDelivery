@@ -1,6 +1,4 @@
 on:
-  fork:
-  push:
   branches: [ master ]
   issues:
     types: [ opened ]
