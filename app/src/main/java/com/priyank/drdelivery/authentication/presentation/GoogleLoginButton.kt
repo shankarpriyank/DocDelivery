@@ -27,6 +27,7 @@ import com.priyank.drdelivery.ui.theme.Shapes
 
 @Composable
 fun SignInButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
     loadingText: String = "Signing in...",
@@ -39,7 +40,7 @@ fun SignInButton(
 
 ) {
     Surface(
-        Modifier.clickable(
+        modifier = modifier.clickable(
             onClick = onClick
         ),
         shape = shape,

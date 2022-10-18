@@ -66,20 +66,16 @@ fun AuthenticationScreen(
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) { page ->
-
+        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth().weight(1f)) { page ->
             Slider(info = viewModel.data()[page])
-
-            HorizontalPagerIndicator(
-
-                pagerState = pagerState,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 700.dp),
-                indicatorShape = RectangleShape,
-                activeColor = DarkBlue, inactiveColor = LightBlue
-            )
         }
+
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            indicatorShape = RectangleShape,
+            activeColor = DarkBlue, inactiveColor = LightBlue
+        )
+
         LaunchedEffect(key1 = pagerState.currentPage) {
             launch {
                 delay(3000)
@@ -98,6 +94,7 @@ fun AuthenticationScreen(
         }
 
         SignInButton(
+            modifier = Modifier.padding(vertical = 16.dp),
             text = "Sign in with Google",
             loadingText = "Signing in...",
             isLoading = false,
