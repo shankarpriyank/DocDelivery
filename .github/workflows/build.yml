@@ -4,8 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
+    paths: &paths
+      - app/**
+      - build.gradle
+      - gradle.properties
+      - settings.gradle
   pull_request:
     branches: [ master ]
+    paths: *paths
  
 
 jobs:
