@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.priyank.drdelivery.authentication.data.UserStorage
 import com.priyank.drdelivery.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 class SplashScreenViewModel @Inject
 constructor(
-    private val isUserLoggedIn: Boolean,
+    private val userStorage: UserStorage,
 ) : ViewModel() {
 
     private val _showSplashScreen = MutableStateFlow(true)
@@ -25,7 +26,7 @@ constructor(
 
     init {
         viewModelScope.launch {
-
+            val isUserLoggedIn = userStorage.isLoggedIn()
             if (isUserLoggedIn) {
                 Log.e("Valye", isUserLoggedIn.toString())
                 _startDestination.value = Screen.Detail.route
