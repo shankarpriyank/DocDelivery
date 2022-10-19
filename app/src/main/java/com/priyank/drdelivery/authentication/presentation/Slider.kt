@@ -26,7 +26,7 @@ fun Slider(info: Info) {
         Text(
             text = info.title,
             modifier = Modifier
-                .padding(bottom = 40.dp),
+                .padding(start = 16.dp, end = 16.dp, bottom = 40.dp),
             fontFamily = Lato,
             fontSize = 20.sp, textAlign = TextAlign.Center
         )
