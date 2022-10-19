@@ -8,7 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.priyank.drdelivery.R
-import com.priyank.drdelivery.authentication.data.UserStorage
+import com.priyank.drdelivery.authentication.data.UserDetails
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,9 +28,9 @@ object MainModule {
 
     @Singleton
     @Provides
-    fun provideUserLocalStorage(@ApplicationContext context: Context): UserStorage {
+    fun provideUserDetails(@ApplicationContext context: Context): UserDetails {
         val sharedPreferences = context.getSharedPreferences("accountDetails", MODE_PRIVATE)
-        return UserStorage(sharedPreferences)
+        return UserDetails(sharedPreferences)
     }
 
     @Singleton

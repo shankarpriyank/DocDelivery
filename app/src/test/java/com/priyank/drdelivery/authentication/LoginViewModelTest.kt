@@ -3,7 +3,7 @@ package com.priyank.drdelivery.authentication
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.priyank.drdelivery.R
-import com.priyank.drdelivery.authentication.data.UserStorage
+import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.navigation.Screen
 import com.priyank.drdelivery.utils.TestDispatcherRule
@@ -19,10 +19,10 @@ class LoginViewModelTest {
     @get:Rule
     val testDispatcherRule = TestDispatcherRule()
 
-    private val userStorage: UserStorage = mockk(relaxed = true)
+    private val userDetails: UserDetails = mockk(relaxed = true)
     private val googleSignInClient: GoogleSignInClient = mockk(relaxed = true)
     private val viewModel = LoginViewModel(
-        userStorage = userStorage,
+        userDetails = userDetails,
         gsc = googleSignInClient,
     )
 
@@ -48,7 +48,7 @@ class LoginViewModelTest {
         )
 
         verify {
-            userStorage.updateUser(
+            userDetails.updateUser(
                 id = "id",
                 name = "name",
                 email = "email",
@@ -64,7 +64,7 @@ class LoginViewModelTest {
         viewModel.signOutUser()
 
         verify {
-            userStorage.signOut()
+            userDetails.signOut()
             googleSignInClient.signOut()
         }
     }

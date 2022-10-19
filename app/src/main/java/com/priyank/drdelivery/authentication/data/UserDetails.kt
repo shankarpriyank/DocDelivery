@@ -2,7 +2,7 @@ package com.priyank.drdelivery.authentication.data
 
 import android.content.SharedPreferences
 
-class UserStorage(
+class UserDetails(
     private val sharedPreferences: SharedPreferences,
 ) {
     fun isLoggedIn() = sharedPreferences.getBoolean("Logged In", false)

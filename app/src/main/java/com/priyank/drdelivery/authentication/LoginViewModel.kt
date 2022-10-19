@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.priyank.drdelivery.R
-import com.priyank.drdelivery.authentication.data.UserStorage
+import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject
 constructor(
-    private val userStorage: UserStorage,
+    private val userDetails: UserDetails,
     private val gsc: GoogleSignInClient,
 ) : ViewModel() {
 
@@ -46,7 +46,7 @@ constructor(
         navHostController: NavHostController
     ) {
         Log.e("Value Updated", "Yayy")
-        userStorage.updateUser(
+        userDetails.updateUser(
             id = id,
             name = name,
             email = email,
@@ -62,7 +62,7 @@ constructor(
 
     fun signOutUser() {
         Log.e("Signout", "Hogya")
-        userStorage.signOut()
+        userDetails.signOut()
         gsc.signOut()
     }
 }

@@ -1,6 +1,6 @@
 package com.priyank.drdelivery
 
-import com.priyank.drdelivery.authentication.data.UserStorage
+import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.navigation.Screen
 import com.priyank.drdelivery.utils.TestDispatcherRule
 import io.mockk.coEvery
@@ -17,20 +17,20 @@ class SplashScreenViewModelTest {
     @get:Rule
     val testDispatcherRule = TestDispatcherRule()
 
-    private val userStorage: UserStorage = mockk(relaxed = true)
+    private val userDetails: UserDetails = mockk(relaxed = true)
 
     @Test
     fun `on init with user logged in, should update start destination state to screen detail`() = runTest {
-        coEvery { userStorage.isLoggedIn() } returns true
-        val viewModel = SplashScreenViewModel(userStorage)
+        coEvery { userDetails.isLoggedIn() } returns true
+        val viewModel = SplashScreenViewModel(userDetails)
         assertEquals(Screen.Detail.route, viewModel.startDestination.value)
         assertFalse(viewModel.showSplashScreen.value)
     }
 
     @Test
     fun `on init with user logged in, should update start destination state to screen authentication`() = runTest {
-        coEvery { userStorage.isLoggedIn() } returns false
-        val viewModel = SplashScreenViewModel(userStorage)
+        coEvery { userDetails.isLoggedIn() } returns false
+        val viewModel = SplashScreenViewModel(userDetails)
         assertEquals(Screen.Authentication.route, viewModel.startDestination.value)
         assertFalse(viewModel.showSplashScreen.value)
     }
