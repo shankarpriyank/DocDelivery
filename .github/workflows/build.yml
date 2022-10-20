@@ -4,8 +4,20 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
+    paths:
+      - app/**
+      - build.gradle
+      - gradle.properties
+      - settings.gradle
+      - .github/workflows/build.yml
   pull_request:
     branches: [ master ]
+    paths:
+      - app/**
+      - build.gradle
+      - gradle.properties
+      - settings.gradle
+      - .github/workflows/build.yml
  
 
 jobs:
