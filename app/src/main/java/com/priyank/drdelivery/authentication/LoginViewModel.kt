@@ -1,11 +1,11 @@
 package com.priyank.drdelivery.authentication
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.priyank.drdelivery.R
+import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject
 constructor(
-    private val sharedPreferences: SharedPreferences,
+    private val userDetails: UserDetails,
     private val gsc: GoogleSignInClient,
 ) : ViewModel() {
 
@@ -46,13 +46,12 @@ constructor(
         navHostController: NavHostController
     ) {
         Log.e("Value Updated", "Yayy")
-        val editor = sharedPreferences.edit()
-        editor.putString("userName", name)
-        editor.putString("userEmail", email)
-        editor.putString("userImageUrl", profilePhotoUrl)
-        editor.putBoolean("Logged In", true)
-        editor.putString("userId", id)
-        editor.apply()
+        userDetails.updateUser(
+            id = id,
+            name = name,
+            email = email,
+            profilePhotoUrl = profilePhotoUrl,
+        )
         Log.i("Name", name.toString())
         Log.i("Email", email.toString())
         Log.i("Url", profilePhotoUrl.toString())
@@ -60,11 +59,10 @@ constructor(
         navHostController.popBackStack()
         navHostController.navigate(Screen.Detail.route)
     }
+
     fun signOutUser() {
         Log.e("Signout", "Hogya")
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("Logged In", false)
-        editor.apply()
+        userDetails.signOut()
         gsc.signOut()
     }
 }
