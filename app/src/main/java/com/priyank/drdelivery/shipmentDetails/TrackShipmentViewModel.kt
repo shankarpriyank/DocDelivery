@@ -1,11 +1,11 @@
 package com.priyank.drdelivery.shipmentDetails
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.gmail.model.Message
+import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
@@ -18,15 +18,15 @@ class TrackShipmentViewModel @Inject
 constructor(
     private val gsaa: GoogleSignInAccount?,
     private val gsc: GoogleSignInClient,
-    private val sharedPreferences: SharedPreferences,
+    private val userDetails: UserDetails,
 ) : ViewModel() {
 
     suspend fun getEmails(): List<Message> {
 
         val emails = GetEmails().getEmails(
             gsc.applicationContext,
-            sharedPreferences.getString("userId", "F"),
-            sharedPreferences.getString("userEmail", "F")
+            userDetails.getUserId(),
+            userDetails.getUserEmail(),
         )
         return emails
     }
