@@ -8,6 +8,7 @@ class UserDetails(
     fun isLoggedIn() = sharedPreferences.getBoolean("Logged In", false)
     fun getUserId() = sharedPreferences.getString("userId", "F")
     fun getUserEmail() = sharedPreferences.getString("userEmail", "F")
+    fun getUserName() = sharedPreferences.getString("userName", "F")
 
     fun updateUser(
         id: String?,

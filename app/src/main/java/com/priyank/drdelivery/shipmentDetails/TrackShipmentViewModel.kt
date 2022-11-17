@@ -12,6 +12,7 @@ import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +24,13 @@ constructor(
     private val userDetails: UserDetails,
 ) : ViewModel() {
 
+    val userName = userDetails.getUserName()!!.substringBefore(" ")
+    var linksFromEmails: MutableList<Triple<String, String, String?>> = mutableListOf()
+
+    var areEmailsLoaded = flow<Boolean> {
+        emit(false)
+    }
+
     suspend fun getEmails(): List<Message> {
 
         val emails = GetEmails().getEmails(
@@ -33,20 +41,28 @@ constructor(
         return emails
     }
 
-    fun call() {
+    fun fetchEmails() {
 
         GlobalScope.launch {
-            val emails = async { getEmails() }
+            areEmailsLoaded = flow {
+                emit(false)
+            }
+            val emails = async { getEmails() }.await()
+            areEmailsLoaded = flow {
+                emit(true)
+            }
 
-            if (emails.await().isEmpty()) {
+            if (emails.isEmpty()) {
                 Log.i("Empty", "No Relevant Info Found")
             } else {
-                for (i in 0 until emails.await().size) {
+                for (i in emails.indices) {
                     try {
-                        val email = ParseEmail().parseEmail(emails.await()[i])
+                        val email = ParseEmail().parseEmail(emails[i])
                         val link = ExtractLinkFromString().findLink(email)
+
                         if (link.first) {
                             Log.i("LINK FOUND IN EMAIL NO $i", link.second)
+                            linksFromEmails.add(Triple("Flipkart", link.second, null))
                         } else {
                             Log.i("LINK NOT FOUND IN EMAIL NO $i", link.first.toString())
                         }

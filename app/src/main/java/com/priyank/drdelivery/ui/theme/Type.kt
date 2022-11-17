@@ -30,5 +30,12 @@ val Typography = Typography(
     */
 )
 val Lato = FontFamily(
-    Font(R.font.lato)
+    Font(R.font.lato_regular)
+)
+
+val LatoLightItalic = FontFamily(
+    Font(R.font.lato_light_italic)
+)
+val LatoThin = FontFamily(
+    Font(R.font.lato_thin)
 )
