@@ -12,6 +12,7 @@ import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,10 +49,6 @@ constructor(
                 emit(false)
             }
             val emails = async { getEmails() }.await()
-            areEmailsLoaded = flow {
-                emit(true)
-            }
-
             if (emails.isEmpty()) {
                 Log.i("Empty", "No Relevant Info Found")
             } else {
@@ -70,6 +67,10 @@ constructor(
                         Log.e("ERROR IN EMAIL NO $i", e.toString())
                     }
                 }
+            }
+            delay(1000)
+            areEmailsLoaded = flow {
+                emit(true)
             }
         }
     }
