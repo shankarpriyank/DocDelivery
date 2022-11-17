@@ -78,7 +78,7 @@ fun BottomNavigationBar(
 
 @Composable
 fun Navigation(navController: NavHostController, navControllerforSigningOut: NavHostController) {
-    NavHost(navController = navController, startDestination = "profile") {
+    NavHost(navController = navController, startDestination = "tracking detail") {
         composable("tracking detail") {
             TrackingDetailScreen()
         }
