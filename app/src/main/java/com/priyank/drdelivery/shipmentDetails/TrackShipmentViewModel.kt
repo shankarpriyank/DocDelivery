@@ -7,6 +7,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.gmail.model.Message
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
+import com.priyank.drdelivery.shipmentDetails.domain.ExtractLinkFromString
 import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
@@ -40,16 +41,14 @@ constructor(
             if (emails.await().isEmpty()) {
                 Log.i("Empty", "No Relevant Info Found")
             } else {
-                val pattern =
-                    Regex("http:\\/\\/delivery\\..+?\\.flipkart\\.com\\/([A-Za-z0-9\\?\\=&\\/\\\\\\+]+)")
                 for (i in 0 until emails.await().size) {
                     try {
                         val email = ParseEmail().parseEmail(emails.await()[i])
-                        val isLinkpresent = pattern.containsMatchIn(email)
-                        if (isLinkpresent) {
-                            Log.e("LINK PRESENT IN EMAIL NO $i", pattern.find(email)!!.value)
+                        val link = ExtractLinkFromString().findLink(email)
+                        if (link.first) {
+                            Log.i("LINK FOUND IN EMAIL NO $i", link.second)
                         } else {
-                            Log.e("LINK NOT PRESENT IN EMAIL NO$i", "Relevant link not found")
+                            Log.i("LINK NOT FOUND IN EMAIL NO $i", link.first.toString())
                         }
                     } catch (e: java.lang.Exception) {
                         Log.e("ERROR IN EMAIL NO $i", e.toString())
