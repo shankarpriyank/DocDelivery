@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
-import com.priyank.drdelivery.shipmentDetails.domain.BottomNavItem
+import com.priyank.drdelivery.shipmentDetails.domain.model.BottomNavItem
 
 @Composable
 fun Greeting(

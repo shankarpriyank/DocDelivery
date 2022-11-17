@@ -7,6 +7,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.gmail.model.Message
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
+import com.priyank.drdelivery.shipmentDetails.domain.ExtractLinkFromString
+import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -40,8 +42,17 @@ constructor(
                 Log.i("Empty", "No Relevant Info Found")
             } else {
                 for (i in 0 until emails.await().size) {
-
-                    Log.i("Email no $i", emails.await()[i].snippet)
+                    try {
+                        val email = ParseEmail().parseEmail(emails.await()[i])
+                        val link = ExtractLinkFromString().findLink(email)
+                        if (link.first) {
+                            Log.i("LINK FOUND IN EMAIL NO $i", link.second)
+                        } else {
+                            Log.i("LINK NOT FOUND IN EMAIL NO $i", link.first.toString())
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Log.e("ERROR IN EMAIL NO $i", e.toString())
+                    }
                 }
             }
         }

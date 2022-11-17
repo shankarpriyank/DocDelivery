@@ -2,6 +2,7 @@ package com.priyank.drdelivery.shipmentDetails.data.remote
 
 import android.accounts.Account
 import android.content.Context
+import android.util.Log
 import com.google.api.client.extensions.android.json.AndroidJsonFactory
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
@@ -61,7 +62,8 @@ class GetEmails {
         val job = GlobalScope.launch(Dispatchers.IO) {
             if (emailList.await().toString() != "{\"resultSizeEstimate\":0}") {
 
-                for (i in 0 until emailList.await()?.messages!!.size - 1) {
+                for (i in 0 until emailList.await()?.messages!!.size) {
+                    Log.i("Getting Email", "email no $i")
                     val email =
                         async {
                             service.users().messages().get("me", emailList.await()!!.messages[i].id)
