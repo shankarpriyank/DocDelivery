@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.gmail.model.Message
-import com.google.api.services.gmail.model.MessagePart
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
+import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -43,16 +43,13 @@ constructor(
                 val pattern =
                     Regex("http:\\/\\/delivery\\..+?\\.flipkart\\.com\\/([A-Za-z0-9\\?\\=&\\/\\\\\\+]+)")
                 for (i in 0 until emails.await().size) {
-
                     try {
-                        val emailSize = emails.await()[i].payload.parts.size
-                        for (k in 0 until emailSize) {
-                            val parsedEmail =
-                                getTextFromBodyPart(emails.await()[i].payload.parts[k])
-                            val isLinkPresent = pattern.containsMatchIn(parsedEmail)
-                            if (isLinkPresent) {
-                                Log.e("PATTERN IN EMAIL NO $i", pattern.find(parsedEmail)!!.value)
-                            }
+                        val email = ParseEmail().parseEmail(emails.await()[i])
+                        val isLinkpresent = pattern.containsMatchIn(email)
+                        if (isLinkpresent) {
+                            Log.e("LINK PRESENT IN EMAIL NO $i", pattern.find(email)!!.value)
+                        } else {
+                            Log.e("LINK NOT PRESENT IN EMAIL NO$i", "Relevant link not found")
                         }
                     } catch (e: java.lang.Exception) {
                         Log.e("ERROR IN EMAIL NO $i", e.toString())
@@ -60,19 +57,5 @@ constructor(
                 }
             }
         }
-    }
-
-    private fun getTextFromBodyPart(
-        bodyPart: MessagePart
-    ): String {
-        var result: String = ""
-        if (bodyPart.mimeType == "text/plain") {
-            val r = bodyPart.body.decodeData()
-            result = String(r)
-        } else if (bodyPart.mimeType == "text/html") {
-            val html = bodyPart.body.decodeData()
-            result = String(html)
-        }
-        return result
     }
 }

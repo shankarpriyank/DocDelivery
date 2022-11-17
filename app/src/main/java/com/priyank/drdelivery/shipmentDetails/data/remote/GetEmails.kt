@@ -62,7 +62,7 @@ class GetEmails {
         val job = GlobalScope.launch(Dispatchers.IO) {
             if (emailList.await().toString() != "{\"resultSizeEstimate\":0}") {
 
-                for (i in 0 until emailList.await()?.messages!!.size - 1) {
+                for (i in 0 until emailList.await()?.messages!!.size) {
                     Log.i("Getting Email", "email no $i")
                     val email =
                         async {

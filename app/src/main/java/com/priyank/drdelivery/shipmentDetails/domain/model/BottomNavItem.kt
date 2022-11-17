@@ -1,4 +1,4 @@
-package com.priyank.drdelivery.shipmentDetails.domain
+package com.priyank.drdelivery.shipmentDetails.domain.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
