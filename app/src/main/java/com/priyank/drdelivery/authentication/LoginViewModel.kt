@@ -61,7 +61,7 @@ constructor(
     }
 
     fun signOutUser() {
-        Log.e("Signout", "Hogya")
+        Log.i("Signout", "Signout Successful")
         userDetails.signOut()
         gsc.signOut()
     }

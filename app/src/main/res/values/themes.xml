@@ -16,7 +16,7 @@
 
   <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
     <item name="windowSplashScreenBackground">@color/white</item>
-    <item name="windowSplashScreenAnimatedIcon">@drawable/img</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
     <item name="windowSplashScreenAnimationDuration">600</item>
     <item name="postSplashScreenTheme">@style/Theme.DrDelivery</item>
   </style>
