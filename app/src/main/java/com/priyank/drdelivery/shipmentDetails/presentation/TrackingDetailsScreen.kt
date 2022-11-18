@@ -74,8 +74,7 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     Button(
                         onClick = { viewModel.fetchEmails() },
                         modifier = Modifier
-                            .padding(start = 300.dp)
-                            .background(Color.Transparent),
+                            .padding(start = 300.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color.Transparent,
                             disabledBackgroundColor = Color.Transparent,
