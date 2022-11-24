@@ -3,6 +3,7 @@ package com.priyank.drdelivery.shipmentDetails.presentation.composables
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -100,6 +101,8 @@ fun ShipmentItem(providerName: String, trackingLink: String, estimatedDateOfDeli
 }
 
 fun openlink(link: String, context: Context) {
-    val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+    val uri = Uri.parse(link)
+    Log.d("URI ", uri.toString())
+    val myIntent = Intent(Intent.ACTION_VIEW, uri)
     startActivity(context, myIntent, null)
 }

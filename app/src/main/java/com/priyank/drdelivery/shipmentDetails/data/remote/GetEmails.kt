@@ -67,7 +67,7 @@ class GetEmails {
                     val email =
                         async {
                             service.users().messages().get("me", emailList.await()!!.messages[i].id)
-                                .setFormat("Full").execute()
+                                .setFormat("raw").execute()
                         }
                     messageList.add(email.await())
                 }

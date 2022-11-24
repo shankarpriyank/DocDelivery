@@ -106,11 +106,12 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                 if (isloaded) {
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                         for (i in 0 until viewModel.linksFromEmails.size) {
+
                             Log.e("RENDER NO $i", "Total ${viewModel.linksFromEmails.size}")
                             ShipmentItem(
-                                providerName = viewModel.linksFromEmails[i].first,
-                                trackingLink = viewModel.linksFromEmails[i].second,
-                                estimatedDateOfDelivery = viewModel.linksFromEmails[i].third
+                                providerName = viewModel.linksFromEmails[i].sentFrom,
+                                trackingLink = viewModel.linksFromEmails[i].trackingLink,
+                                estimatedDateOfDelivery = viewModel.linksFromEmails[i].dateOfReceivingEmail ?: "N/A"
                             )
                         }
                     }
