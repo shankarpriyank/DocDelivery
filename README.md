@@ -1,4 +1,4 @@
-# DocDelivery
+# DocDelivery(DocDelivery will be live soon)
 [![CodeFactor](https://www.codefactor.io/repository/github/shankarpriyank/docdelivery/badge)](https://www.codefactor.io/repository/github/shankarpriyank/docdelivery)
 [![Build](https://github.com/shankarpriyank/Dr.Delivery/actions/workflows/build.yml/badge.svg)](https://github.com/shankarpriyank/Dr.Delivery/actions/workflows/build.yml)  
 
