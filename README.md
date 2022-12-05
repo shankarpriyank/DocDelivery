@@ -8,7 +8,9 @@ DocDelivery is built using Kotlin and it leverages Jetpack Compose, Dagger-Hilt,
 For detailed information on how DocDelivery is developed see [development wiki]()
 
 ## Login UI
-![Media_221205_231044](https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif)
+<p align="center"> 
+  <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height=400  />
+</p>
 
 
 
