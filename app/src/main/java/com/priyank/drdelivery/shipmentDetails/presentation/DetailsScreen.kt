@@ -38,6 +38,9 @@ fun Greeting(
             }
         )
     }) {
-        Navigation(navController = navControllerForBottomNav, navControllerforSigningOut = navHostController)
+        Navigation(
+            navController = navControllerForBottomNav,
+            navControllerforSigningOut = navHostController
+        )
     }
 }

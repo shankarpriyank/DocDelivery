@@ -56,7 +56,6 @@ fun ProfileScreen(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
-
                 ),
                 elevation = null,
                 modifier = Modifier
@@ -78,7 +77,6 @@ fun ProfileScreen(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
-
                 ),
                 elevation = null,
 
@@ -101,7 +99,6 @@ fun ProfileScreen(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
-
                 ),
                 elevation = null,
 
@@ -143,7 +140,6 @@ fun ProfileScreen(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
-
                 ),
                 elevation = null,
                 modifier = Modifier
@@ -167,10 +163,8 @@ fun ProfileScreen(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
-
                 ),
                 elevation = null,
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Start)
@@ -191,10 +185,8 @@ fun ProfileScreen(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
-
                 ),
                 elevation = null,
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Start)

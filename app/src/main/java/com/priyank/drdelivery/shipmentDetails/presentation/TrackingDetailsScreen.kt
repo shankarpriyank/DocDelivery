@@ -78,7 +78,6 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color.Transparent,
                             disabledBackgroundColor = Color.Transparent,
-
                         ),
                         elevation = null
                     ) {
