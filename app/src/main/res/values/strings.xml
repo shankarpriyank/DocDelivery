@@ -3,7 +3,7 @@
   <string name="title_activity_login">LoginActivity</string>
 
   <!--Change this with your API KEY -->
-  <string name="gcp_credentials">${{ secrets.API_KEY }}</string>
+  <string name="gcp_credentials">106138286243-pp03lq658480ullir06u03e1pv8tf075.apps.googleusercontent.com</string>
   <string name="title_activity_shipment_details">ShipmentDetailsActivity</string>
   <string name="title_activity_main">MainActivity</string>
 </resources>

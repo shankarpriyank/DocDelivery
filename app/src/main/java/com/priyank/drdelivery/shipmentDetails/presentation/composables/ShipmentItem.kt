@@ -22,10 +22,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import com.priyank.drdelivery.Greeting
 import com.priyank.drdelivery.R
+import com.priyank.drdelivery.ui.theme.DrDeliveryTheme
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.buttonBlue
 
@@ -102,4 +105,10 @@ fun ShipmentItem(providerName: String, trackingLink: String, estimatedDateOfDeli
 fun openlink(link: String, context: Context) {
     val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
     startActivity(context, myIntent, null)
+}
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview7() {
+        ShipmentItem("Flipkart","shivamlink","20")
+
 }

@@ -8,8 +8,9 @@ class ExtractLinkFromString {
 
     fun findLink(email: String): Triple<Boolean, String, String> {
         val link = ""
-        val pattern =
-            Regex("http:\\/\\/delivery\\..+?\\.flipkart\\.com\\/([A-Za-z0-9\\?\\=&\\/\\\\\\+]+)")
+//        val pattern =
+//            Regex("http:\\/\\/delivery\\..+?\\.flipkart\\.com\\/([A-Za-z0-9\\?\\=&\\/\\\\\\+]+)")
+        val pattern = Regex("http://delivery.flipkart.com/abcd")
         val isLinkpresent = pattern.containsMatchIn(email)
         return if (isLinkpresent) {
             Triple(true, pattern.find(email)!!.value, "Flipkart")

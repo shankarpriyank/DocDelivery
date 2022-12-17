@@ -3,6 +3,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.priyank.drdelivery">
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_SMS" />
+
   <application
     android:name=".di.MyApplication"
     android:allowBackup="true"
@@ -11,6 +13,10 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/Theme.DrDelivery">
+<!--    <provider-->
+<!--        android:name=".SmsContentProvider"-->
+<!--        android:authorities="com.example.smsprovider"-->
+<!--        android:exported="false" />-->
     <activity
       android:name=".MainActivity"
       android:exported="true"

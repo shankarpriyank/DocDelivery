@@ -15,13 +15,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.ui.theme.Lato
+
 @Composable
 fun Slider(info: Info) {
     Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = info.image), contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth().fillMaxHeight(.8f)
+                .fillMaxWidth()
+                .fillMaxHeight(.8f)
         )
         Text(
             text = info.title,

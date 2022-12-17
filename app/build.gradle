@@ -66,6 +66,7 @@ configurations {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -85,7 +86,9 @@ dependencies {
 
     //gmail
     implementation 'com.google.apis:google-api-services-gmail:v1-rev24-1.19.1'
-    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+//    implementation 'androidx.compose.runtime:runtime-saved-instance-state:1.0.0-alpha09'
+
+    implementation 'com.google.android.gms:play-services-auth:20.4.0'
     implementation('com.google.api-client:google-api-client-android:1.30.9') {
         exclude group: 'org.apache.httpcomponents'
     }
@@ -133,6 +136,7 @@ dependencies {
 
     //Lottie
     implementation "com.airbnb.android:lottie-compose:5.2.0"
+
 
 
 

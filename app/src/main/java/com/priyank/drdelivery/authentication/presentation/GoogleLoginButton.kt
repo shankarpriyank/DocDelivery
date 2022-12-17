@@ -37,7 +37,6 @@ fun SignInButton(
     borderColor: androidx.compose.ui.graphics.Color = LightGray,
     backgroundColor: androidx.compose.ui.graphics.Color = MaterialTheme.colors.surface,
     progressIndicatorColor: androidx.compose.ui.graphics.Color = MaterialTheme.colors.primary,
-
 ) {
     Surface(
         modifier = modifier.clickable(
@@ -84,14 +83,16 @@ fun SignInButton(
         }
     }
 }
-//
+
 // @ExperimentalMaterialApi
 // @Composable
 // @Preview
 // fun SignInButtonPreview() {
-//    SignInButton( modifier = Modifier.height(20.dp),
+//    SignInButton(
+//        modifier = Modifier.height(20.dp),
 //        text = "Sign in with Google",
-//        loadingText = "Signing in...",
-//        isLoading = false,
-//        icon = painterResource(id = com.priyank.drdelivery.R.drawable.ic_google_login)
+//      //  loadingText = "Signing in...",
+//      //  isLoading = false,
+//        icon = painterResource(id = com.priyank.drdelivery.R.drawable.ic_google_login), onClick = {val x=2}
 //    )
+// }

@@ -8,8 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -25,6 +24,7 @@ import com.google.android.gms.common.api.ApiException
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.GoogleApiContract
 import com.priyank.drdelivery.authentication.LoginViewModel
+import com.priyank.drdelivery.shipmentDetailsOffline.SMSPermissionScreen
 import com.priyank.drdelivery.ui.theme.DarkBlue
 import com.priyank.drdelivery.ui.theme.LightBlue
 import kotlinx.coroutines.delay
@@ -37,6 +37,7 @@ fun AuthenticationScreen(
     navHostController: NavHostController
 ) {
     val signInRequestCode = 1
+    val showDialog = remember { mutableStateOf(false) }
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
             try {
@@ -57,8 +58,17 @@ fun AuthenticationScreen(
                 Log.e("Error in AuthScreen%s", e.toString())
             }
         }
+    var isDialogShown by remember { mutableStateOf(false) }
+    fun onDismiss() {
+        isDialogShown = false
+    }
+
+    fun onClick() {
+        isDialogShown = true
+    }
 
     val pagerState = rememberPagerState(pageCount = 3)
+
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -66,7 +76,12 @@ fun AuthenticationScreen(
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth().weight(1f)) { page ->
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) { page ->
             Slider(info = viewModel.data()[page])
         }
 
@@ -101,5 +116,12 @@ fun AuthenticationScreen(
             icon = painterResource(id = R.drawable.ic_google_login),
             onClick = { authResultLauncher.launch(signInRequestCode) },
         )
+        OfflineMButton(
+            modifier = Modifier,
+            { onClick() }
+        )
+        if (isDialogShown) {
+            SMSPermissionScreen({ onDismiss() })
+        }
     }
 }
