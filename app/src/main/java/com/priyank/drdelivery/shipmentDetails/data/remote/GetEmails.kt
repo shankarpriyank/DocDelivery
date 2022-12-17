@@ -63,12 +63,14 @@ class GetEmails {
             if (emailList.await().toString() != "{\"resultSizeEstimate\":0}") {
 
                 for (i in 0 until emailList.await()?.messages!!.size) {
+
                     Log.i("Getting Email", "email no $i")
                     val email =
                         async {
                             service.users().messages().get("me", emailList.await()!!.messages[i].id)
-                                .setFormat("raw").execute()
+                                .setFormat("full").execute()
                         }
+
                     messageList.add(email.await())
                 }
             }

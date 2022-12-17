@@ -104,6 +104,7 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     fontSize = 28.sp
                 )
                 if (isloaded) {
+
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                         for (i in 0 until viewModel.linksFromEmails.size) {
 
@@ -111,7 +112,7 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                             ShipmentItem(
                                 providerName = viewModel.linksFromEmails[i].sentFrom,
                                 trackingLink = viewModel.linksFromEmails[i].trackingLink,
-                                estimatedDateOfDelivery = viewModel.linksFromEmails[i].dateOfReceivingEmail ?: "N/A"
+                                estimatedDateOfDelivery = null ?: "N/A"
                             )
                         }
                     }

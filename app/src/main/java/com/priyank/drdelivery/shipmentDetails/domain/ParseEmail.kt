@@ -1,14 +1,12 @@
 package com.priyank.drdelivery.shipmentDetails.domain
 
-import android.os.Environment
 import android.util.Log
+import com.google.api.client.util.Base64
+import com.google.api.client.util.StringUtils
 import com.google.api.services.gmail.model.Message
 import com.google.api.services.gmail.model.MessagePart
 import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingEmail
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
-import java.text.SimpleDateFormat
+import java.util.Date
 
 class ParseEmail {
 
@@ -22,25 +20,28 @@ class ParseEmail {
 
         var result: String = ""
         if (bodyPart.mimeType == "text/plain") {
-            val r = bodyPart.body.decodeData()
-            result = r.toString(Charsets.UTF_8)
+            val r = bodyPart.body.data
+            result =
+                StringUtils
+                    .newStringUtf8(Base64.decodeBase64(r))
         } else if (bodyPart.mimeType == "text/html") {
-            val html = bodyPart.body.decodeData()
-            result = html.toString(Charsets.UTF_8)
+            val html = bodyPart.body.data
+            val s = StringUtils
+                .newStringUtf8(Base64.decodeBase64(html))
+
+            result = s
         }
         return result
     }
 
     fun parseEmail(email: Message): InterestingEmail? {
-        //   val emailSize = email.payload.parts.size
+        val emailSize = email.payload.parts.size
         var parsedEmail = " "
 
-//        for (k in 0 until emailSize) {
-//            parsedEmail += getTextFromBodyPart(email.payload.parts[k])
-//        }
-        parsedEmail += stringFromEmail(email)
+        for (k in 0 until emailSize) {
+            parsedEmail += getTextFromBodyPart(email.payload.parts[k])
+        }
 
-        val link = ""
         val FlipkartPattern =
             Regex("http:\\/\\/delivery\\..+?\\.flipkart\\.com\\/([A-Za-z0-9\\?\\=&\\/\\\\\\+]+)")
         val isLinkpresent = FlipkartPattern.containsMatchIn(parsedEmail)
@@ -49,7 +50,12 @@ class ParseEmail {
 
             Log.d("EMAIL ${timeEmailWasRecieved(email)}", parsedEmail)
 
-            return InterestingEmail(FlipkartPattern.find(parsedEmail)!!.value, "Flipkart", timeEmailWasRecieved(email), null)
+            return InterestingEmail(
+                FlipkartPattern.find(parsedEmail)!!.value,
+                "Flipkart",
+                timeEmailWasRecieved(email),
+                null
+            )
         } else {
 
             Log.d(" LINK NOT FOUND IN EMAIL ${timeEmailWasRecieved(email)}", parsedEmail)
@@ -61,26 +67,7 @@ class ParseEmail {
     fun timeEmailWasRecieved(email: Message): String {
 
         val timeInMillis = email.get("internalDate") as String
-        val sdf = SimpleDateFormat("MM/dd/yyyy")
         val netDate = Date(timeInMillis.toLong()).toLocaleString()
         return netDate
-    }
-    fun stringFromEmail(email: Message): String {
-        var body = ""
-
-        val re = email.raw
-        Log.e("FULL RAW EMAIL", re)
-        val path = Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DOWNLOADS
-        )
-        val fileOutputStream: FileOutputStream = File(path, "rawem_${email.id}.txt").outputStream()
-        val outputWriter = OutputStreamWriter(fileOutputStream)
-        outputWriter.write(re)
-        outputWriter.write("/n")
-        outputWriter.close()
-        val decoder: Base64.Decoder = Base64.getDecoder()
-        val gg = String(decoder.decode(re))
-        body = gg
-        return body
     }
 }

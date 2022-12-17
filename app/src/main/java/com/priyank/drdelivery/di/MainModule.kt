@@ -41,6 +41,7 @@ object MainModule {
             .requestScopes(Scope("https://www.googleapis.com/auth/gmail.readonly"))
             .requestEmail()
             .build()
+
         // Build a GoogleSignInClient with the options specified by gso.
         return GoogleSignIn.getClient(context, gso)
     }

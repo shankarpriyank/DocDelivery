@@ -49,22 +49,16 @@ constructor(
                 emit(false)
             }
 
-            val pat = Regex("/\\[image:\\WTrack\\Wyour\\Wpackage\\]\\W*?<(.*?)>/ig")
-            val sss =
-                "https://www.amazon.in/gp/r.html?C=3A5D8OS1VAHET&K=1IXOUBB3U3OEG&M=urn:rtn:msg:20221004050136d71f0410c6284efd8455d67d0890p0eu&R=12CAGIT6533ST&T=C&U=https%3A%2F%2Fwww.amazon.in%2Fgp%2Fcss%2Fshiptrack%2Fview.html%3Fie%3DUTF8%26orderID%3D402-9374048-0465927%26orderingShipmentId%3D48268116374302%26packageId%3D1%26ref_%3Dpe_24967711_587055801_302_E_DDE&H=DGQZ8PY5WNOVFCPHNHWEWKNPM48A&ref_=pe_24967711_587055801_302_E_DDE"
-            Log.e("LO", pat.containsMatchIn(sss).toString())
-
             val emails = async { getEmails() }.await()
             if (emails.isEmpty()) {
                 Log.i("Empty", "No Relevant Info Found")
             } else {
                 for (i in emails.indices) {
                     try {
-                        val k = emails[i]
 
                         val parsedEmail = ParseEmail().parseEmail(emails[i])
                         if (parsedEmail != null) {
-                            //   Log.e("LOL $i", parsedEmail.toString())
+                            Log.i("Link found in email no$i", parsedEmail.trackingLink)
                             linksFromEmails.add(parsedEmail)
                         } else {
                             Log.d("LINK NOT FOUND IN EMAIL NO $i", "")

@@ -77,7 +77,7 @@ fun ShipmentItem(providerName: String, trackingLink: String, estimatedDateOfDeli
                 )
             }
             Button(
-                onClick = { openlink(trackingLink, context) },
+                onClick = { openLink(trackingLink, context) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
@@ -100,7 +100,7 @@ fun ShipmentItem(providerName: String, trackingLink: String, estimatedDateOfDeli
     }
 }
 
-fun openlink(link: String, context: Context) {
+fun openLink(link: String, context: Context) {
     val uri = Uri.parse(link)
     Log.d("URI ", uri.toString())
     val myIntent = Intent(Intent.ACTION_VIEW, uri)
