@@ -10,7 +10,6 @@ class ExtractLinkFromString {
         val link = ""
         val pattern =
             Regex("http:\\/\\/delivery\\..+?\\.flipkart\\.com\\/([A-Za-z0-9\\?\\=&\\/\\\\\\+]+)")
-        
         val isLinkpresent = pattern.containsMatchIn(email)
         return if (isLinkpresent) {
             Triple(true, pattern.find(email)!!.value, "Flipkart")
