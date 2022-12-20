@@ -55,7 +55,6 @@ constructor(
                 for (i in emails.indices) {
                     try {
                         val email = ParseEmail().parseEmail(emails[i])
-                        Log.i("email", email)
                         val link = ExtractLinkFromString().findLink(email)
 
                         if (link.first) {
