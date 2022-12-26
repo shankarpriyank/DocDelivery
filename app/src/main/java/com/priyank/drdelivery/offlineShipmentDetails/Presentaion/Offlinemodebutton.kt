@@ -26,8 +26,7 @@ import com.priyank.drdelivery.ui.theme.Shapes
 @Composable
 fun OfflineMButton(
     modifier: Modifier,
-    onClick: () -> Unit
-
+    onClick: () -> Unit,
 ) {
     Surface(
         modifier = modifier.clickable(
@@ -57,11 +56,11 @@ fun OfflineMButton(
             Icon(
                 painter = painterResource(id = com.priyank.drdelivery.R.drawable.offbutt_removebg_preview),
                 contentDescription = "OfflineButton",
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
 
-            Text(text = "Use Offline Mode")
+            Text(text = " Use Offline Mode ")
         }
     }
 }

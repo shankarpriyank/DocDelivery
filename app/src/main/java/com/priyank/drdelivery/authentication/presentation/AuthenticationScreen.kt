@@ -6,7 +6,10 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +53,7 @@ fun AuthenticationScreen(
     fun onClick() {
         isDialogShow = true
     }
+
     val signInRequestCode = 1
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
@@ -111,17 +115,23 @@ fun AuthenticationScreen(
                 }
             }
         }
-
-        SignInButton(
-            modifier = Modifier.padding(vertical = 16.dp),
-            text = "Sign in with Google",
-            loadingText = "Signing in...",
-            isLoading = false,
-            icon = painterResource(id = R.drawable.ic_google_login),
-            onClick = { authResultLauncher.launch(signInRequestCode) },
-        )
-        OfflineMButton(Modifier, { onClick() })
-        if (isDialogShow)
-            SMSPermissionScreen({ onDismiss() })
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SignInButton(
+                modifier = Modifier.padding(vertical = 16.dp),
+                text = "Sign in with Google",
+                loadingText = "Signing in...",
+                isLoading = false,
+                icon = painterResource(id = R.drawable.ic_google_login),
+                onClick = { authResultLauncher.launch(signInRequestCode) },
+            )
+            OfflineMButton(Modifier, { onClick() })
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        if (isDialogShow == true)
+            SMSPermissionScreen({ onDismiss() }, navHostController)
     }
 }

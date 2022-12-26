@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -20,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,14 +39,22 @@ import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LatoLightItalic
 
 @Composable
-fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
+fun TrackingDetailScreen(
+    viewModel: TrackShipmentViewModel = hiltViewModel(),
+) {
 
     var isloaded = viewModel.areEmailsLoaded.collectAsState(initial = false).value
-
-    LaunchedEffect(key1 = true) {
-        viewModel.fetchEmails()
+    val context = LocalContext.current
+    var issmsloaded = viewModel.areSMSLoaded.collectAsState(initial = false).value
+    if (viewModel.onlineMode) {
+        LaunchedEffect(key1 = true) {
+            viewModel.fetchEmails()
+        }
+    } else {
+        LaunchedEffect(key1 = true) {
+            viewModel.fetchSMS(context)
+        }
     }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,7 +74,9 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
 
                 Box(modifier = Modifier) {
                     Text(
-                        text = viewModel.userName, color = Color.Black, fontFamily = Lato,
+                        text = if (viewModel.onlineMode) viewModel.userName
+                        else "Offline User",
+                        color = Color.Black, fontFamily = Lato,
                         fontWeight = FontWeight.Bold,
 
                         modifier = Modifier.padding(start = 30.dp, bottom = 20.dp),
@@ -83,9 +95,15 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                         elevation = null
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_refresh),
+                            painter = painterResource(
+                                if (viewModel.onlineMode) R.drawable.ic_refresh
+                                else R.drawable.offbutt_removebg_preview
+                            ),
                             contentDescription = "refresh",
-                            modifier = Modifier.background(Color.Transparent)
+                            modifier = if (viewModel.onlineMode) Modifier.background(Color.Transparent)
+                            else Modifier
+                                .background(Color.Transparent)
+                                .size(50.dp)
                         )
                     }
                 }
@@ -103,15 +121,24 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
-                if (isloaded) {
+                if ((isloaded) || ((viewModel.onlineMode == false) && (issmsloaded))) {
+                    Log.i("info", "${viewModel.smsList.size}")
 
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        for (i in 0 until viewModel.linksFromEmails.size) {
+                        for (
+                            i in 0 until if (viewModel.onlineMode) viewModel.linksFromEmails.size
+                            else viewModel.smsList.size
+                        ) {
 
-                            Log.e("RENDER NO $i", "Total ${viewModel.linksFromEmails.size}")
+                            Log.e(
+                                "RENDER NO $i",
+                                "Total ${if (viewModel.onlineMode) viewModel.linksFromEmails.size else viewModel.smsList.size}"
+                            )
                             ShipmentItem(
-                                providerName = viewModel.linksFromEmails[i].sentFrom,
-                                trackingLink = viewModel.linksFromEmails[i].trackingLink,
+                                providerName = if (viewModel.onlineMode) viewModel.linksFromEmails[i].sentFrom else
+                                    viewModel.smsList[i].address,
+                                trackingLink = if (viewModel.onlineMode) viewModel.linksFromEmails[i].trackingLink else
+                                    viewModel.smsList[i].link,
                                 estimatedDateOfDelivery = null ?: "N/A"
                             )
                         }
