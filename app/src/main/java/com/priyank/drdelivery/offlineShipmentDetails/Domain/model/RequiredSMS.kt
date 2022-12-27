@@ -1,9 +1,9 @@
 package com.priyank.drdelivery.offlineShipmentDetails.Domain.model
 
 data class RequiredSMS(
-    val id: Int,
-    val address: String,
-    val date: String,
-    val body: String,
-    val link: String
+    val smsId: Int,
+    val smsAddress: String,
+    val smsDate: String,
+    val smsBody: String,
+    val smsTrackLink: String
 )

@@ -136,9 +136,9 @@ fun TrackingDetailScreen(
                             )
                             ShipmentItem(
                                 providerName = if (viewModel.onlineMode) viewModel.linksFromEmails[i].sentFrom else
-                                    viewModel.smsList[i].address,
+                                    viewModel.smsList[i].smsAddress,
                                 trackingLink = if (viewModel.onlineMode) viewModel.linksFromEmails[i].trackingLink else
-                                    viewModel.smsList[i].link,
+                                    viewModel.smsList[i].smsTrackLink,
                                 estimatedDateOfDelivery = null ?: "N/A"
                             )
                         }
