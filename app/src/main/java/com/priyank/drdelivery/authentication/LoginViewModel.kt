@@ -35,9 +35,6 @@ constructor(
         )
     }
 
-    init {
-    }
-
     fun fetchSignInUser(
         id: String?,
         email: String?,

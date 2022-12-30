@@ -121,7 +121,7 @@ fun TrackingDetailScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
-                if ((isloaded) || ((viewModel.onlineMode == false) && (issmsloaded))) {
+                if (isloaded || (viewModel.onlineMode == false && issmsloaded)) {
                     Log.i("info", "${viewModel.smsList.size}")
 
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
