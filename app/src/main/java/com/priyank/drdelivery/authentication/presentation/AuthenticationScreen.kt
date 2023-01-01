@@ -1,5 +1,6 @@
 package com.priyank.drdelivery.authentication.presentation
 
+import android.app.Activity
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -20,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,7 +55,7 @@ fun AuthenticationScreen(
     fun onClick() {
         isDialogShow = true
     }
-
+    val activity = LocalContext.current as Activity
     val signInRequestCode = 1
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
@@ -132,6 +134,6 @@ fun AuthenticationScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
         if (isDialogShow == true)
-            SMSPermissionScreen({ onDismiss() }, navHostController)
+            SMSPermissionScreen({ onDismiss() }, navHostController, activity)
     }
 }
