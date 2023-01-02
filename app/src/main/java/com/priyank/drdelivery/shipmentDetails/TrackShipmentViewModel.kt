@@ -1,6 +1,5 @@
 package com.priyank.drdelivery.shipmentDetails
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -28,6 +27,7 @@ constructor(
     private val gsaa: GoogleSignInAccount?,
     private val gsc: GoogleSignInClient,
     private val userDetails: UserDetails,
+    private val GetSMS: GetSMS
 ) : ViewModel() {
 
     val userName = userDetails.getUserName()!!.substringBefore(" ")
@@ -41,13 +41,13 @@ constructor(
     }
     val onlineMode = userDetails.isLoggedIn()
     var smsList = mutableListOf<RequiredSMS>()
-    fun fetchSMS(context: Context) {
+    fun fetchSMS() {
         GlobalScope.launch {
             areSMSLoaded = flow {
                 emit(false)
             }
             CoroutineScope(Dispatchers.IO).launch {
-                smsList = GetSMS.getSMS(context)
+                smsList = GetSMS.getSMS()
             }
             delay(1000)
             areSMSLoaded = flow {

@@ -9,10 +9,10 @@ import java.util.Date
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-object GetSMS {
+class GetSMS(private val context: Context) {
     val smsList = mutableListOf<RequiredSMS>()
 
-    suspend fun getSMS(context: Context): MutableList<RequiredSMS> {
+    fun getSMS(): MutableList<RequiredSMS> {
         // Some works that require permission
         val contentResolver = context.contentResolver
         val smsUri = Uri.parse("content://sms/")

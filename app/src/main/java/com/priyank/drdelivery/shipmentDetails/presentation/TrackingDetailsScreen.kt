@@ -21,7 +21,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,7 +43,6 @@ fun TrackingDetailScreen(
 ) {
 
     var isloaded = viewModel.areEmailsLoaded.collectAsState(initial = false).value
-    val context = LocalContext.current
     var issmsloaded = viewModel.areSMSLoaded.collectAsState(initial = false).value
     if (viewModel.onlineMode) {
         LaunchedEffect(key1 = true) {
@@ -52,7 +50,7 @@ fun TrackingDetailScreen(
         }
     } else {
         LaunchedEffect(key1 = true) {
-            viewModel.fetchSMS(context)
+            viewModel.fetchSMS()
         }
     }
     Box(
