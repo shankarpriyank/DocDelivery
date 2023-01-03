@@ -53,6 +53,7 @@ fun TrackingDetailScreen(
             viewModel.fetchSMS()
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,9 +135,9 @@ fun TrackingDetailScreen(
                             )
                             ShipmentItem(
                                 providerName = if (viewModel.onlineMode) viewModel.linksFromEmails[i].sentFrom else
-                                    viewModel.smsList[i].smsAddress,
+                                    viewModel.smsList.elementAt(i).smsAddress,
                                 trackingLink = if (viewModel.onlineMode) viewModel.linksFromEmails[i].trackingLink else
-                                    viewModel.smsList[i].smsTrackLink,
+                                    viewModel.smsList.elementAt(i).smsTrackLink,
                                 estimatedDateOfDelivery = null ?: "N/A"
                             )
                         }

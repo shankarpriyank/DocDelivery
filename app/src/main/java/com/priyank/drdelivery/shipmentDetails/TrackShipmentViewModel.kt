@@ -40,7 +40,7 @@ constructor(
         emit(false)
     }
     val onlineMode = userDetails.isLoggedIn()
-    var smsList = mutableListOf<RequiredSMS>()
+    var smsList: MutableSet<RequiredSMS> = mutableSetOf()
     fun fetchSMS() {
         GlobalScope.launch {
             areSMSLoaded = flow {
@@ -54,6 +54,10 @@ constructor(
                 emit(true)
             }
         }
+    }
+
+    fun emptySMS(){
+        smsList.clear()
     }
     suspend fun getEmails(): List<Message> {
         val emails = GetEmails().getEmails(
