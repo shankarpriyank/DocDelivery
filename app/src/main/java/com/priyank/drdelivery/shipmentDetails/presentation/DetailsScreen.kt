@@ -18,7 +18,7 @@ fun Greeting(
 ) {
     val navControllerForBottomNav = rememberNavController()
     val isOnline = viewModel.onlineMode
-    if(isOnline) {
+    if (isOnline) {
         Scaffold(bottomBar = {
             BottomNavigationBar(
                 items = listOf(
@@ -44,8 +44,7 @@ fun Greeting(
                 navControllerforSigningOut = navHostController
             )
         }
-    }
-    else{
+    } else {
         TrackingDetailScreen()
     }
 }

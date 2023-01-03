@@ -56,7 +56,7 @@ constructor(
         }
     }
 
-    fun emptySMS(){
+    fun emptySMS() {
         smsList.clear()
     }
     suspend fun getEmails(): List<Message> {
