@@ -7,7 +7,6 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -55,6 +54,7 @@ fun AuthenticationScreen(
     fun onClick() {
         isDialogShow = true
     }
+
     val activity = LocalContext.current as Activity
     val signInRequestCode = 1
     val authResultLauncher =
@@ -117,22 +117,19 @@ fun AuthenticationScreen(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SignInButton(
-                modifier = Modifier.padding(vertical = 16.dp),
-                text = "Sign in with Google",
-                loadingText = "Signing in...",
-                isLoading = false,
-                icon = painterResource(id = R.drawable.ic_google_login),
-                onClick = { authResultLauncher.launch(signInRequestCode) },
-            )
-            OfflineMButton(Modifier, { onClick() })
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+
+        SignInButton(
+            modifier = Modifier.padding(vertical = 16.dp),
+            text = "Sign in with Google",
+            loadingText = "Signing in...",
+            isLoading = false,
+            icon = painterResource(id = R.drawable.ic_google_login),
+            onClick = { authResultLauncher.launch(signInRequestCode) },
+        )
+
+        OfflineMButton(Modifier, { onClick() })
+        Spacer(modifier = Modifier.height(20.dp))
+
         if (isDialogShow == true)
             SMSPermissionScreen({ onDismiss() }, navHostController, activity)
     }

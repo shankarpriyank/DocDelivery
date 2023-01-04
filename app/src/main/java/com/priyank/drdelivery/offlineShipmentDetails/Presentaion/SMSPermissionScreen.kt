@@ -71,7 +71,7 @@ fun SMSPermissionScreen(
                 }) { Text(text = "OK", color = Color(176, 221, 249)) }
             },
             dismissButton = {
-                TextButton(onClick = {}) { Text(text = "Cancel", color = Color(176, 221, 249)) }
+                TextButton(onClick = onDismiss) { Text(text = "Cancel", color = Color(176, 221, 249)) }
             },
             title = { Text(text = "Please confirm") },
             text = { Text(text = "We are using your SMS details. Do you continue with the requested action?") }
