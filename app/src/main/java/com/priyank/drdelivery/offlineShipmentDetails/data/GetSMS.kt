@@ -1,16 +1,16 @@
-package com.priyank.drdelivery.offlineShipmentDetails.Data
+package com.priyank.drdelivery.offlineShipmentDetails.data
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.priyank.drdelivery.offlineShipmentDetails.Domain.model.RequiredSMS
-import java.text.SimpleDateFormat
+import com.priyank.drdelivery.offlineShipmentDetails.domain.model.RequiredSMS
+import java.text.DateFormat.getDateTimeInstance
 import java.util.Date
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class GetSMS(private val context: Context) {
-    val smsList = mutableSetOf<RequiredSMS>()
+    private val smsList = mutableSetOf<RequiredSMS>()
 
     fun getSMS(): MutableSet<RequiredSMS> {
         // Some works that require permission
@@ -24,12 +24,13 @@ class GetSMS(private val context: Context) {
 
         // Iterate over the cursor and print out the SMS messages
         while (cursor!!.moveToNext()) {
-            val id = cursor?.getInt(0)
-            val address = cursor?.getString(1)
-            val body = cursor?.getString(3)
-            val date = cursor?.getLong(2)
+            val id = cursor.getInt(0)
+            val address = cursor.getString(1)
+            val body = cursor.getString(3)
+            val date = cursor.getLong(2)
             val date2 = Date(date)
-            val format = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+            // val format = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+            val format = getDateTimeInstance()
             val dateText: String = format.format(date2)
             val pattern: Pattern = Pattern.compile("http://fkrt.it/Zy[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]uuuN")
             val matcher: Matcher = pattern.matcher(body)

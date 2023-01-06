@@ -9,7 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.data.UserDetails
-import com.priyank.drdelivery.offlineShipmentDetails.Data.GetSMS
+import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

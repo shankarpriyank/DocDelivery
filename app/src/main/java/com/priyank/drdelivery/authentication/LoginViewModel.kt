@@ -54,7 +54,7 @@ constructor(
         Log.i("Url", profilePhotoUrl.toString())
         Log.i("Id", id.toString())
         navHostController.popBackStack()
-        navHostController.navigate(Screen.Detail.route)
+        navHostController.navigate(Screen.Welcome.route)
     }
 
     fun signOutUser() {

@@ -29,7 +29,7 @@ constructor(
             val isUserLoggedIn = userDetails.isLoggedIn()
             if (isUserLoggedIn) {
                 Log.e("Is user signed in", isUserLoggedIn.toString())
-                _startDestination.value = Screen.Detail.route
+                _startDestination.value = Screen.Welcome.route
             } else {
                 Log.e("Is user signed in", isUserLoggedIn.toString())
                 _startDestination.value = Screen.Authentication.route

@@ -6,19 +6,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.gmail.model.Message
 import com.priyank.drdelivery.authentication.data.UserDetails
-import com.priyank.drdelivery.offlineShipmentDetails.Data.GetSMS
-import com.priyank.drdelivery.offlineShipmentDetails.Domain.model.RequiredSMS
+import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
+import com.priyank.drdelivery.offlineShipmentDetails.domain.model.RequiredSMS
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
 import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
 import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,6 +42,7 @@ constructor(
     }
     val onlineMode = userDetails.isLoggedIn()
     var smsList: MutableSet<RequiredSMS> = mutableSetOf()
+    @OptIn(DelicateCoroutinesApi::class)
     fun fetchSMS() {
         GlobalScope.launch {
             areSMSLoaded = flow {
@@ -56,18 +58,15 @@ constructor(
         }
     }
 
-    fun emptySMS() {
-        smsList.clear()
-    }
-    suspend fun getEmails(): List<Message> {
-        val emails = GetEmails().getEmails(
+    private suspend fun getEmails(): List<Message> {
+        return GetEmails().getEmails(
             gsc.applicationContext,
             userDetails.getUserId(),
             userDetails.getUserEmail(),
         )
-        return emails
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun fetchEmails() {
 
         GlobalScope.launch {
@@ -75,7 +74,8 @@ constructor(
                 emit(false)
             }
 
-            val emails = async { getEmails() }.await()
+            val emails =
+                withContext(Dispatchers.Default) { getEmails() }
             if (emails.isEmpty()) {
                 Log.i("Empty", "No Relevant Info Found")
             } else {

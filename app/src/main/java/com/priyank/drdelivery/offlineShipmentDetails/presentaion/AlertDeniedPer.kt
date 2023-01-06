@@ -1,4 +1,4 @@
-package com.priyank.drdelivery.offlineShipmentDetails.Presentaion
+package com.priyank.drdelivery.offlineShipmentDetails.presentaion
 
 import android.content.Context
 import android.content.Intent

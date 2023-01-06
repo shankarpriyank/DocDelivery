@@ -1,4 +1,4 @@
-package com.priyank.drdelivery.shipmentDetailsOffline
+package com.priyank.drdelivery.offlineShipmentDetails.presentaion
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.priyank.drdelivery.navigation.Screen
-import com.priyank.drdelivery.offlineShipmentDetails.Presentaion.AlertDeniedPer
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -38,12 +37,11 @@ fun SMSPermissionScreen(
         }
     }
     val context = LocalContext.current
-    class MyObject(var value: Int)
-    var count = remember { MyObject(0) }
-    var showNewAlert = remember {
+    val count = remember { mutableStateOf(0) }
+    val showNewAlert = remember {
         mutableStateOf(false)
     }
-    if (showNewAlert.value == false) {
+    if (!showNewAlert.value) {
         AlertDialog(
             onDismissRequest = { onDismiss() },
             confirmButton = {
@@ -53,7 +51,6 @@ fun SMSPermissionScreen(
                             context,
                             Manifest.permission.READ_SMS
                         ) -> {
-                            navHostController.popBackStack()
                             navHostController.navigate(Screen.Detail.route)
                         }
 

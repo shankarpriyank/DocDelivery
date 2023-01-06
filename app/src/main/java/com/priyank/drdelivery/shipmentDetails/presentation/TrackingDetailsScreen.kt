@@ -42,8 +42,8 @@ fun TrackingDetailScreen(
     viewModel: TrackShipmentViewModel = hiltViewModel(),
 ) {
 
-    var isloaded = viewModel.areEmailsLoaded.collectAsState(initial = false).value
-    var issmsloaded = viewModel.areSMSLoaded.collectAsState(initial = false).value
+    val isloaded = viewModel.areEmailsLoaded.collectAsState(initial = false).value
+    val issmsloaded = viewModel.areSMSLoaded.collectAsState(initial = false).value
     if (viewModel.onlineMode) {
         LaunchedEffect(key1 = true) {
             viewModel.fetchEmails()
@@ -120,7 +120,7 @@ fun TrackingDetailScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
-                if (isloaded || viewModel.onlineMode == false && issmsloaded) {
+                if (isloaded || !viewModel.onlineMode && issmsloaded) {
                     Log.i("info", "${viewModel.smsList.size}")
 
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

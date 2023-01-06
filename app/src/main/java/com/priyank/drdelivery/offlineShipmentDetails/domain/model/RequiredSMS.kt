@@ -1,4 +1,4 @@
-package com.priyank.drdelivery.offlineShipmentDetails.Domain.model
+package com.priyank.drdelivery.offlineShipmentDetails.domain.model
 
 data class RequiredSMS(
     val smsId: Int,
