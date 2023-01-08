@@ -8,6 +8,7 @@ import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.navigation.Screen
+import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,8 +17,8 @@ class LoginViewModel @Inject
 constructor(
     private val userDetails: UserDetails,
     private val gsc: GoogleSignInClient,
+    private val userPer: PerDetails
 ) : ViewModel() {
-
     fun data(): List<Info> {
 
         return listOf(
@@ -40,7 +41,8 @@ constructor(
         email: String?,
         name: String?,
         profilePhotoUrl: String? = null,
-        navHostController: NavHostController
+        navHostController: NavHostController,
+        screen: Boolean
     ) {
         Log.e("Value Updated", "Yayy")
         userDetails.updateUser(
@@ -53,13 +55,24 @@ constructor(
         Log.i("Email", email.toString())
         Log.i("Url", profilePhotoUrl.toString())
         Log.i("Id", id.toString())
-        navHostController.popBackStack()
-        navHostController.navigate(Screen.Welcome.route)
+
+        if (screen) {
+            navHostController.popBackStack()
+            navHostController.navigate(Screen.Detail.route)
+        }
     }
 
     fun signOutUser() {
         Log.i("Signout", "Signout Successful")
         userDetails.signOut()
         gsc.signOut()
+    }
+
+    fun updateUserPer(
+        sms: Boolean,
+        signIn: Boolean,
+        bothPer: Boolean
+    ) {
+        userPer.updatePer(onlySMS = sms, onlySignIn = signIn, bothPer = bothPer)
     }
 }

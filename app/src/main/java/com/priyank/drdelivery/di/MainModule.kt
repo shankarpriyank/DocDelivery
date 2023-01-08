@@ -10,6 +10,7 @@ import com.google.android.gms.common.api.Scope
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
+import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,5 +52,12 @@ object MainModule {
     @Provides
     fun provideGetSMS(@ApplicationContext context: Context): GetSMS {
         return GetSMS(context)
+    }
+
+    @Singleton
+    @Provides
+    fun providePerDetails(@ApplicationContext context: Context): PerDetails {
+        val sharedPreferences = context.getSharedPreferences("permissionDetails", MODE_PRIVATE)
+        return PerDetails(sharedPreferences)
     }
 }

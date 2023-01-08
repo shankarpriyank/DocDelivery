@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.AlertDialog
@@ -25,7 +26,8 @@ import com.priyank.drdelivery.navigation.Screen
 fun SMSPermissionScreen(
     onDismiss: () -> Unit,
     navHostController: NavHostController,
-    activity: Activity
+    activity: Activity,
+    screen2: Boolean,
 ) {
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -51,13 +53,26 @@ fun SMSPermissionScreen(
                             context,
                             Manifest.permission.READ_SMS
                         ) -> {
-                            navHostController.navigate(Screen.Detail.route)
+                            if (screen2) {
+                                navHostController.popBackStack()
+                                navHostController.navigate(Screen.Detail.route)
+                            } else {
+                                onDismiss()
+                                Toast.makeText(
+                                    context,
+                                    "SMS permission granted",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
 
                         else -> {
                             // Asking for permission
                             launcher.launch(Manifest.permission.READ_SMS)
-                            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_SMS) && count.value> 0
+                            if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                                    activity,
+                                    Manifest.permission.READ_SMS
+                                ) && count.value > 0
                             ) {
                                 // The permission has been permanently denied by the user
                                 showNewAlert.value = true
@@ -68,7 +83,12 @@ fun SMSPermissionScreen(
                 }) { Text(text = "OK", color = Color(176, 221, 249)) }
             },
             dismissButton = {
-                TextButton(onClick = onDismiss) { Text(text = "Cancel", color = Color(176, 221, 249)) }
+                TextButton(onClick = onDismiss) {
+                    Text(
+                        text = "Cancel",
+                        color = Color(176, 221, 249)
+                    )
+                }
             },
             title = { Text(text = "Please confirm") },
             text = { Text(text = "We are using your SMS details. Do you continue with the requested action?") }

@@ -7,6 +7,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.gmail.model.Message
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
+import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
 import com.priyank.drdelivery.offlineShipmentDetails.domain.model.RequiredSMS
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
 import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
@@ -28,7 +29,8 @@ constructor(
     private val gsaa: GoogleSignInAccount?,
     private val gsc: GoogleSignInClient,
     private val userDetails: UserDetails,
-    private val GetSMS: GetSMS
+    private val GetSMS: GetSMS,
+    private val perDetails: PerDetails
 ) : ViewModel() {
 
     val userName = userDetails.getUserName()!!.substringBefore(" ")
@@ -42,7 +44,7 @@ constructor(
     }
     val onlineMode = userDetails.isLoggedIn()
     var smsList: MutableSet<RequiredSMS> = mutableSetOf()
-    @OptIn(DelicateCoroutinesApi::class)
+
     fun fetchSMS() {
         GlobalScope.launch {
             areSMSLoaded = flow {
