@@ -14,9 +14,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,14 +35,31 @@ import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
 import com.priyank.drdelivery.shipmentDetails.presentation.composables.ShipmentItem
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LatoLightItalic
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
 
-    var isloaded = viewModel.areEmailsLoaded.collectAsState(initial = false).value
+    val state = viewModel.state.value
+    val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
-        viewModel.fetchEmails()
+        viewModel.getEmails()
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+            }
+        }
     }
 
     Box(
@@ -72,7 +89,7 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     )
 
                     Button(
-                        onClick = { viewModel.fetchEmails() },
+                        onClick = { GlobalScope.launch(Dispatchers.IO) { viewModel.getEmails() } },
                         modifier = Modifier
                             .padding(start = 300.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -103,15 +120,15 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
-                if (isloaded) {
+                if (!state.loading) {
 
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        for (i in 0 until viewModel.linksFromEmails.size) {
+                        for (i in 0 until state.interestingEmail.size) {
 
-                            Log.e("RENDER NO $i", "Total ${viewModel.linksFromEmails.size}")
+                            Log.e("RENDER NO $i", "Total ${state.interestingEmail.size}")
                             ShipmentItem(
-                                providerName = viewModel.linksFromEmails[i].sentFrom,
-                                trackingLink = viewModel.linksFromEmails[i].trackingLink,
+                                providerName = state.interestingEmail[i].sentFrom,
+                                trackingLink = state.interestingEmail[i].trackingLink,
                                 estimatedDateOfDelivery = null ?: "N/A"
                             )
                         }

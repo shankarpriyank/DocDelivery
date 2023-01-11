@@ -3,6 +3,7 @@ package com.priyank.drdelivery.authentication
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -14,11 +15,14 @@ import com.priyank.drdelivery.R
 class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?>() {
 
     override fun parseResult(resultCode: Int, intent: Intent?): Task<GoogleSignInAccount>? {
-        return when (resultCode) {
+        when (resultCode) {
             Activity.RESULT_OK -> {
-                GoogleSignIn.getSignedInAccountFromIntent(intent)
+                return GoogleSignIn.getSignedInAccountFromIntent(intent)
             }
-            else -> null
+            else -> {
+                Log.e("Error", "Result Code $resultCode")
+                return null
+            }
         }
     }
 

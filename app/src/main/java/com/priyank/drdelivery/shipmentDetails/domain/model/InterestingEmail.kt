@@ -1,6 +1,12 @@
 package com.priyank.drdelivery.shipmentDetails.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class InterestingEmail(
+    @PrimaryKey
+    val id: String,
     val trackingLink: String,
     val sentFrom: String,
     val dateOfReceivingEmail: String,
