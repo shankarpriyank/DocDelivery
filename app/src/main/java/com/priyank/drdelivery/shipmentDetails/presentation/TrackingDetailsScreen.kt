@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -52,16 +53,16 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
+            Log.e("Snal", "bar")
             when (event) {
                 is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message
+                        message = event.message ?: "Unknown Error"
                     )
                 }
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,38 +121,41 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
-                if (!state.loading) {
+                Scaffold(scaffoldState = scaffoldState) {
 
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        for (i in 0 until state.interestingEmail.size) {
+                    if (!state.loading) {
 
-                            Log.e("RENDER NO $i", "Total ${state.interestingEmail.size}")
-                            ShipmentItem(
-                                providerName = state.interestingEmail[i].sentFrom,
-                                trackingLink = state.interestingEmail[i].trackingLink,
-                                estimatedDateOfDelivery = null ?: "N/A"
-                            )
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            for (i in 0 until state.interestingEmail.size) {
+
+                                Log.e("RENDER NO $i", "Total ${state.interestingEmail.size}")
+                                ShipmentItem(
+                                    providerName = state.interestingEmail[i].sentFrom,
+                                    trackingLink = state.interestingEmail[i].trackingLink,
+                                    estimatedDateOfDelivery = null ?: "N/A"
+                                )
+                            }
                         }
+                    } else {
+                        val composition by rememberLottieComposition(
+                            LottieCompositionSpec
+                                .RawRes(R.raw.loading)
+                        )
+                        val progress by animateLottieCompositionAsState(
+                            composition,
+
+                            iterations = LottieConstants.IterateForever,
+                            isPlaying = true,
+                            speed = .5f,
+                            ignoreSystemAnimatorScale = true
+
+                        )
+                        LottieAnimation(
+                            composition = composition,
+                            progress = progress,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
-                } else {
-                    val composition by rememberLottieComposition(
-                        LottieCompositionSpec
-                            .RawRes(R.raw.loading)
-                    )
-                    val progress by animateLottieCompositionAsState(
-                        composition,
-
-                        iterations = LottieConstants.IterateForever,
-                        isPlaying = true,
-                        speed = .5f,
-                        ignoreSystemAnimatorScale = true
-
-                    )
-                    LottieAnimation(
-                        composition = composition,
-                        progress = progress,
-                        modifier = Modifier.fillMaxSize()
-                    )
                 }
             }
         }

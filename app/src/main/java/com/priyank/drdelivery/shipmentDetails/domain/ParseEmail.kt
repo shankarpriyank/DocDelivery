@@ -38,7 +38,7 @@ class ParseEmail() {
 
     fun parseEmail(email: Message): InterestingEmail? {
 
-        val emailSize = email.payload.parts.size
+        val emailSize = email.payload.parts?.size ?: 0
         var parsedEmail = " "
 
         for (k in 0 until emailSize) {
