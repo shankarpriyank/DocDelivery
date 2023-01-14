@@ -9,8 +9,12 @@ For detailed information on how DocDelivery is developed see [development wiki](
 
 ## Login UI
 <p align="center"> 
-  <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height=400  />
-</p>
+  <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height="10%" width="30%"  />
+</p> 
+
+<!--  <p align="center"> 
+  <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height=400>
+</p> -->
 
 
 
