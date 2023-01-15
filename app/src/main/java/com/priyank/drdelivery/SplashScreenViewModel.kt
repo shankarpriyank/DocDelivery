@@ -28,10 +28,10 @@ constructor(
         viewModelScope.launch {
             val isUserLoggedIn = userDetails.isLoggedIn()
             if (isUserLoggedIn) {
-                Log.e("Is user signed in", isUserLoggedIn.toString())
+                Log.i("Is user signed in", isUserLoggedIn.toString())
                 _startDestination.value = Screen.Detail.route
             } else {
-                Log.e("Is user signed in", isUserLoggedIn.toString())
+                Log.i("Is user signed in", isUserLoggedIn.toString())
                 _startDestination.value = Screen.Authentication.route
             }
             _showSplashScreen.emit(false)

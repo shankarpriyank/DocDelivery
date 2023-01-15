@@ -53,11 +53,10 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
-            Log.e("Snal", "bar")
             when (event) {
                 is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message ?: "Unknown Error"
+                        message = event.message
                     )
                 }
             }
@@ -128,7 +127,7 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                             for (i in 0 until state.interestingEmail.size) {
 
-                                Log.e("RENDER NO $i", "Total ${state.interestingEmail.size}")
+                                Log.i("RENDER NO $i", "Total ${state.interestingEmail.size}")
                                 ShipmentItem(
                                     providerName = state.interestingEmail[i].sentFrom,
                                     trackingLink = state.interestingEmail[i].trackingLink,

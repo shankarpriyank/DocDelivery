@@ -45,7 +45,7 @@ constructor(
         profilePhotoUrl: String? = null,
         navHostController: NavHostController
     ) {
-        Log.e("Value Updated", "Yayy")
+        Log.i("User ", "SignedIn")
         userDetails.updateUser(
             id = id,
             name = name,
