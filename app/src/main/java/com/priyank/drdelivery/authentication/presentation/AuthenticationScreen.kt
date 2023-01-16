@@ -1,6 +1,8 @@
 package com.priyank.drdelivery.authentication.presentation
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -50,6 +53,7 @@ fun AuthenticationScreen(
 ) {
     var isSignInChosen by remember { mutableStateOf(false) }
     var isOfflineChosen by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     fun onSignInChosen() {
         isSignInChosen = true
     }
@@ -83,6 +87,9 @@ fun AuthenticationScreen(
                         navHostController = navHostController,
                         screen = isOfflineChosen
                     )
+                    if (!isOfflineChosen && !isSignInChosen) {
+                        onSignInChosen()
+                    }
                 } else {
                     Log.e("Login Failed", "Error")
                 }
@@ -138,14 +145,21 @@ fun AuthenticationScreen(
                 icon = painterResource(id = R.drawable.ic_google_login),
                 onClick = {
                     authResultLauncher.launch(signInRequestCode)
-                    onSignInChosen()
                 },
             )
         }
         if (!isOfflineChosen && !isSignInChosen) {
             OfflineButton {
                 onClick()
-                onOfflineChosen()
+                when (PackageManager.PERMISSION_GRANTED) {
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.READ_SMS
+                    ) -> {
+                        onOfflineChosen()
+                    }
+                    else -> {}
+                }
             }
             Spacer(modifier = Modifier.height(18.dp))
         }
