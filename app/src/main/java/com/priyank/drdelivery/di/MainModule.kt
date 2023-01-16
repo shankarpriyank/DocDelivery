@@ -1,7 +1,9 @@
 package com.priyank.drdelivery.di
 
+import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import androidx.room.Room
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -11,6 +13,10 @@ import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
 import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
+import com.priyank.drdelivery.shipmentDetails.data.local.EmailDatabase
+import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
+import com.priyank.drdelivery.shipmentDetails.data.repository.EmailRepositoryImpl
+import com.priyank.drdelivery.shipmentDetails.domain.repository.EmailRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,5 +65,27 @@ object MainModule {
     fun providePerDetails(@ApplicationContext context: Context): PerDetails {
         val sharedPreferences = context.getSharedPreferences("permissionDetails", MODE_PRIVATE)
         return PerDetails(sharedPreferences)
+        
+    @Provides
+    @Singleton
+    fun providesGetEmails(gsc: GoogleSignInClient, userDetails: UserDetails): GetEmails {
+        return GetEmails(gsc, userDetails)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWordInfoRepository(
+        db: EmailDatabase,
+        api: GetEmails
+    ): EmailRepository {
+        return EmailRepositoryImpl(db.emailDao, api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWordInfoDatabase(app: Application): EmailDatabase {
+        return Room.databaseBuilder(
+            app, EmailDatabase::class.java, "email_db"
+        ).build()
     }
 }

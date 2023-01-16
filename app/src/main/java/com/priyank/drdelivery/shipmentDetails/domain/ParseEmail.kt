@@ -8,7 +8,7 @@ import com.google.api.services.gmail.model.MessagePart
 import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingEmail
 import java.util.Date
 
-class ParseEmail {
+class ParseEmail() {
 
     // #TODO
     // Add more pattern to find link from Amazon,Myntra,Ajio etc
@@ -20,6 +20,7 @@ class ParseEmail {
 
         var result: String = ""
         if (bodyPart.mimeType == "text/plain") {
+
             val r = bodyPart.body.data
             result =
                 StringUtils
@@ -31,11 +32,13 @@ class ParseEmail {
 
             result = s
         }
+
         return result
     }
 
     fun parseEmail(email: Message): InterestingEmail? {
-        val emailSize = email.payload.parts.size
+
+        val emailSize = email.payload.parts?.size ?: 0
         var parsedEmail = " "
 
         for (k in 0 until emailSize) {
@@ -51,6 +54,7 @@ class ParseEmail {
             Log.d("EMAIL ${timeEmailWasRecieved(email)}", parsedEmail)
 
             return InterestingEmail(
+                email.id,
                 FlipkartPattern.find(parsedEmail)!!.value,
                 "Flipkart",
                 timeEmailWasRecieved(email),

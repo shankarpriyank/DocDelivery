@@ -14,10 +14,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,10 @@ import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
 import com.priyank.drdelivery.shipmentDetails.presentation.composables.ShipmentItem
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LatoLightItalic
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun TrackingDetailScreen(
@@ -52,8 +57,24 @@ fun TrackingDetailScreen(
         LaunchedEffect(key1 = true) {
             viewModel.fetchSMS()
         }
+    val state = viewModel.state.value
+    val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getEmails()
     }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,7 +104,7 @@ fun TrackingDetailScreen(
                     )
 
                     Button(
-                        onClick = { viewModel.fetchEmails() },
+                        onClick = { GlobalScope.launch(Dispatchers.IO) { viewModel.getEmails() } },
                         modifier = Modifier
                             .padding(start = 300.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -140,27 +161,41 @@ fun TrackingDetailScreen(
                                     viewModel.smsList.elementAt(i).smsTrackLink,
                                 estimatedDateOfDelivery = null ?: "N/A"
                             )
+                Scaffold(scaffoldState = scaffoldState) {
+
+                    if (!state.loading) {
+
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            for (i in 0 until state.interestingEmail.size) {
+
+                                Log.i("RENDER NO $i", "Total ${state.interestingEmail.size}")
+                                ShipmentItem(
+                                    providerName = state.interestingEmail[i].sentFrom,
+                                    trackingLink = state.interestingEmail[i].trackingLink,
+                                    estimatedDateOfDelivery = null ?: "N/A"
+                                )
+                            }
                         }
+                    } else {
+                        val composition by rememberLottieComposition(
+                            LottieCompositionSpec
+                                .RawRes(R.raw.loading)
+                        )
+                        val progress by animateLottieCompositionAsState(
+                            composition,
+
+                            iterations = LottieConstants.IterateForever,
+                            isPlaying = true,
+                            speed = .5f,
+                            ignoreSystemAnimatorScale = true
+
+                        )
+                        LottieAnimation(
+                            composition = composition,
+                            progress = progress,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
-                } else {
-                    val composition by rememberLottieComposition(
-                        LottieCompositionSpec
-                            .RawRes(R.raw.loading)
-                    )
-                    val progress by animateLottieCompositionAsState(
-                        composition,
-
-                        iterations = LottieConstants.IterateForever,
-                        isPlaying = true,
-                        speed = .5f,
-                        ignoreSystemAnimatorScale = true
-
-                    )
-                    LottieAnimation(
-                        composition = composition,
-                        progress = progress,
-                        modifier = Modifier.fillMaxSize()
-                    )
                 }
             }
         }

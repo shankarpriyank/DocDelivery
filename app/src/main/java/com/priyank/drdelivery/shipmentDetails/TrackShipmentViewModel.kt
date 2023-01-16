@@ -1,10 +1,8 @@
 package com.priyank.drdelivery.shipmentDetails
 
-import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.api.services.gmail.model.Message
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
 import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
@@ -21,20 +19,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.priyank.drdelivery.shipmentDetails.domain.model.EmailInfoState
+import com.priyank.drdelivery.shipmentDetails.domain.repository.EmailRepository
+import com.priyank.drdelivery.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class TrackShipmentViewModel @Inject
 constructor(
-    private val gsaa: GoogleSignInAccount?,
-    private val gsc: GoogleSignInClient,
     private val userDetails: UserDetails,
     private val GetSMS: GetSMS,
     private val perDetails: PerDetails
+    private val repository: EmailRepository
 ) : ViewModel() {
 
     val userName = userDetails.getUserName()!!.substringBefore(" ")
-    var linksFromEmails: MutableList<InterestingEmail> = mutableListOf()
 
     var areEmailsLoaded = flow<Boolean> {
         emit(false)
@@ -70,11 +73,21 @@ constructor(
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchEmails() {
+    private val _state = mutableStateOf(EmailInfoState())
+    val state: State<EmailInfoState> = _state
 
-        GlobalScope.launch {
-            areEmailsLoaded = flow {
-                emit(false)
-            }
+    private val _eventFlow = MutableSharedFlow<UIEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
+    suspend fun getEmails() {
+        repository.getEmails().onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    _state.value = state.value.copy(
+                        interestingEmail = result.data ?: emptyList(),
+                        loading = false
+                    )
+                }
 
             val emails =
                 withContext(Dispatchers.Default) { getEmails() }
@@ -83,23 +96,45 @@ constructor(
             } else {
                 for (i in emails.indices) {
                     try {
+                is Resource.Loading -> {
+                    if (result.data != null) {
+                        if (result.data.isEmpty()) {
 
-                        val parsedEmail = ParseEmail().parseEmail(emails[i])
-                        if (parsedEmail != null) {
-                            Log.i("Link found in email no$i", parsedEmail.trackingLink)
-                            linksFromEmails.add(parsedEmail)
+                            _state.value = state.value.copy(
+                                interestingEmail = result.data,
+                                loading = true
+                            )
                         } else {
-                            Log.d("LINK NOT FOUND IN EMAIL NO $i", "")
+
+                            _state.value = state.value.copy(
+                                interestingEmail = result.data,
+                                loading = false
+                            )
                         }
-                    } catch (e: java.lang.Exception) {
-                        Log.d("ERROR IN EMAIL NO $i", e.toString())
+                    } else {
+
+                        _state.value = state.value.copy(
+                            interestingEmail = emptyList(),
+                            loading = true
+                        )
                     }
                 }
+
+                is Resource.Error -> {
+
+                    _state.value = state.value.copy(
+                        interestingEmail = result.data ?: emptyList(),
+                        loading = false
+                    )
+
+                    _eventFlow.emit(UIEvent.ShowSnackbar(result.message ?: "Something Went Wrong"))
+                }
             }
-            delay(1000)
-            areEmailsLoaded = flow {
-                emit(true)
-            }
+        }.collect {
         }
+    }
+
+    sealed class UIEvent {
+        data class ShowSnackbar(val message: String) : UIEvent()
     }
 }

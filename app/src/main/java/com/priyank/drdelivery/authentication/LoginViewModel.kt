@@ -44,7 +44,7 @@ constructor(
         navHostController: NavHostController,
         screen: Boolean
     ) {
-        Log.e("Value Updated", "Yayy")
+        Log.i("User ", "SignedIn")
         userDetails.updateUser(
             id = id,
             name = name,
