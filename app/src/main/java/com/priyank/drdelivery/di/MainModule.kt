@@ -65,7 +65,8 @@ object MainModule {
     fun providePerDetails(@ApplicationContext context: Context): PerDetails {
         val sharedPreferences = context.getSharedPreferences("permissionDetails", MODE_PRIVATE)
         return PerDetails(sharedPreferences)
-        
+    }
+
     @Provides
     @Singleton
     fun providesGetEmails(gsc: GoogleSignInClient, userDetails: UserDetails): GetEmails {

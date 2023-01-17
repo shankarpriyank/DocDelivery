@@ -19,6 +19,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,164 +38,182 @@ import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
 import com.priyank.drdelivery.shipmentDetails.presentation.composables.ShipmentItem
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LatoLightItalic
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun TrackingDetailScreen(
     viewModel: TrackShipmentViewModel = hiltViewModel(),
 ) {
-
-    val isloaded = viewModel.areEmailsLoaded.collectAsState(initial = false).value
+    val state = viewModel.state.value
+    val scaffoldState = rememberScaffoldState()
     val issmsloaded = viewModel.areSMSLoaded.collectAsState(initial = false).value
     if (viewModel.onlineMode) {
         LaunchedEffect(key1 = true) {
-            viewModel.fetchEmails()
+            viewModel.getEmails()
+        }
+        LaunchedEffect(key1 = true) {
+            viewModel.eventFlow.collectLatest { event ->
+                when (event) {
+                    is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = event.message
+                        )
+                    }
+                }
+            }
         }
     } else {
         LaunchedEffect(key1 = true) {
             viewModel.fetchSMS()
         }
-    val state = viewModel.state.value
-    val scaffoldState = rememberScaffoldState()
 
-    LaunchedEffect(key1 = true) {
-        viewModel.getEmails()
-    }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message
-                    )
-                }
-            }
-        }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 40.dp)
-    ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .padding(bottom = 40.dp)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
 
-            Column(modifier = Modifier) {
-                Text(
-                    text = "Hi, Friend", color = Color.LightGray, fontFamily = LatoLightItalic,
-                    modifier = Modifier.padding(start = 25.dp, top = 30.dp),
-                    fontSize = 28.sp,
-                )
-
-                Box(modifier = Modifier) {
+                Column(modifier = Modifier) {
                     Text(
-                        text = if (viewModel.onlineMode) viewModel.userName
-                        else "Offline User",
-                        color = Color.Black, fontFamily = Lato,
-                        fontWeight = FontWeight.Bold,
-
-                        modifier = Modifier.padding(start = 30.dp, bottom = 20.dp),
-                        fontSize = 26.sp
+                        text = "Hi, Friend", color = Color.LightGray, fontFamily = LatoLightItalic,
+                        modifier = Modifier.padding(start = 25.dp, top = 30.dp),
+                        fontSize = 28.sp,
                     )
 
-                    Button(
-                        onClick = { GlobalScope.launch(Dispatchers.IO) { viewModel.getEmails() } },
-                        modifier = Modifier
-                            .padding(start = 300.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent,
-                            disabledBackgroundColor = Color.Transparent,
+                    Box(modifier = Modifier) {
+                        Text(
+                            text = if (viewModel.onlineMode) viewModel.userName
+                            else "Offline User",
+                            color = Color.Black, fontFamily = Lato,
+                            fontWeight = FontWeight.Bold,
 
-                        ),
-                        elevation = null
-                    ) {
-                        Image(
-                            painter = painterResource(
-                                if (viewModel.onlineMode) R.drawable.ic_refresh
-                                else R.drawable.offbutt_removebg_preview
-                            ),
-                            contentDescription = "refresh",
-                            modifier = if (viewModel.onlineMode) Modifier.background(Color.Transparent)
-                            else Modifier
-                                .background(Color.Transparent)
-                                .size(50.dp)
+                            modifier = Modifier.padding(start = 30.dp, bottom = 20.dp),
+                            fontSize = 26.sp
                         )
-                    }
-                }
 
-                Divider(
-                    color = Color.LightGray,
-                    thickness = 2.dp,
-                    startIndent = 25.dp,
-                    modifier = Modifier.padding(end = 25.dp, bottom = 30.dp)
-                )
-                Text(
-                    text = "Shipments",
-                    modifier = Modifier.padding(start = 124.dp),
-                    fontFamily = Lato,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                )
-                if (isloaded || !viewModel.onlineMode && issmsloaded) {
-                    Log.i("info", "${viewModel.smsList.size}")
+                        Button(
+                            onClick = { GlobalScope.launch(Dispatchers.IO) { viewModel.getEmails() } },
+                            modifier = Modifier
+                                .padding(start = 300.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Transparent,
+                                disabledBackgroundColor = Color.Transparent,
 
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        for (
-                            i in 0 until if (viewModel.onlineMode) viewModel.linksFromEmails.size
-                            else viewModel.smsList.size
+                            ),
+                            elevation = null
                         ) {
-
-                            Log.e(
-                                "RENDER NO $i",
-                                "Total ${if (viewModel.onlineMode) viewModel.linksFromEmails.size else viewModel.smsList.size}"
+                            Image(
+                                painter = painterResource(
+                                    if (viewModel.onlineMode) R.drawable.ic_refresh
+                                    else R.drawable.offbutt_removebg_preview
+                                ),
+                                contentDescription = "refresh",
+                                modifier = if (viewModel.onlineMode) Modifier.background(Color.Transparent)
+                                else Modifier
+                                    .background(Color.Transparent)
+                                    .size(50.dp)
                             )
-                            ShipmentItem(
-                                providerName = if (viewModel.onlineMode) viewModel.linksFromEmails[i].sentFrom else
-                                    viewModel.smsList.elementAt(i).smsAddress,
-                                trackingLink = if (viewModel.onlineMode) viewModel.linksFromEmails[i].trackingLink else
-                                    viewModel.smsList.elementAt(i).smsTrackLink,
-                                estimatedDateOfDelivery = null ?: "N/A"
-                            )
-                Scaffold(scaffoldState = scaffoldState) {
+                        }
+                    }
 
-                    if (!state.loading) {
+                    Divider(
+                        color = Color.LightGray,
+                        thickness = 2.dp,
+                        startIndent = 25.dp,
+                        modifier = Modifier.padding(end = 25.dp, bottom = 30.dp)
+                    )
+                    Text(
+                        text = "Shipments",
+                        modifier = Modifier.padding(start = 124.dp),
+                        fontFamily = Lato,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp
+                    )
+                    if (viewModel.onlineMode) {
+                        Scaffold(scaffoldState = scaffoldState) {
+                            if (!state.loading) {
+                                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                                    for (i in 0 until state.interestingEmail.size) {
+                                        Log.i(
+                                            "RENDER NO $i",
+                                            "Total ${state.interestingEmail.size}"
+                                        )
+                                        ShipmentItem(
+                                            providerName = state.interestingEmail[i].sentFrom,
+                                            trackingLink = state.interestingEmail[i].trackingLink,
+                                            estimatedDateOfDelivery = null ?: "N/A"
+                                        )
+                                    }
+                                }
+                            } else {
+                                val composition by rememberLottieComposition(
+                                    LottieCompositionSpec
+                                        .RawRes(R.raw.loading)
+                                )
+                                val progress by animateLottieCompositionAsState(
+                                    composition,
 
-                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            for (i in 0 until state.interestingEmail.size) {
+                                    iterations = LottieConstants.IterateForever,
+                                    isPlaying = true,
+                                    speed = .5f,
+                                    ignoreSystemAnimatorScale = true
 
-                                Log.i("RENDER NO $i", "Total ${state.interestingEmail.size}")
-                                ShipmentItem(
-                                    providerName = state.interestingEmail[i].sentFrom,
-                                    trackingLink = state.interestingEmail[i].trackingLink,
-                                    estimatedDateOfDelivery = null ?: "N/A"
+                                )
+                                LottieAnimation(
+                                    composition = composition,
+                                    progress = progress,
+                                    modifier = Modifier.fillMaxSize()
                                 )
                             }
                         }
                     } else {
-                        val composition by rememberLottieComposition(
-                            LottieCompositionSpec
-                                .RawRes(R.raw.loading)
-                        )
-                        val progress by animateLottieCompositionAsState(
-                            composition,
+                        if (!viewModel.onlineMode && issmsloaded) {
+                            Log.i("info", "${viewModel.smsList.size}")
 
-                            iterations = LottieConstants.IterateForever,
-                            isPlaying = true,
-                            speed = .5f,
-                            ignoreSystemAnimatorScale = true
+                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                                for (
+                                    i in 0 until viewModel.smsList.size
+                                ) {
+                                    Log.e(
+                                        "RENDER NO $i",
+                                        "Total ${viewModel.smsList.size}"
+                                    )
+                                    ShipmentItem(
+                                        providerName = viewModel.smsList.elementAt(i).smsAddress,
+                                        trackingLink = viewModel.smsList.elementAt(i).smsTrackLink,
+                                        estimatedDateOfDelivery = null ?: "N/A"
+                                    )
+                                }
+                            }
+                        } else {
+                            val composition by rememberLottieComposition(
+                                LottieCompositionSpec
+                                    .RawRes(R.raw.loading)
+                            )
+                            val progress by animateLottieCompositionAsState(
+                                composition,
 
-                        )
-                        LottieAnimation(
-                            composition = composition,
-                            progress = progress,
-                            modifier = Modifier.fillMaxSize()
-                        )
+                                iterations = LottieConstants.IterateForever,
+                                isPlaying = true,
+                                speed = .5f,
+                                ignoreSystemAnimatorScale = true
+
+                            )
+                            LottieAnimation(
+                                composition = composition,
+                                progress = progress,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     }
                 }
             }
