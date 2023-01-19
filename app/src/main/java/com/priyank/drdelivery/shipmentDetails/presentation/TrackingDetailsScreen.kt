@@ -19,7 +19,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,172 +47,127 @@ import kotlinx.coroutines.launch
 @Composable
 fun TrackingDetailScreen(
     viewModel: TrackShipmentViewModel = hiltViewModel(),
+
 ) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
-    val issmsloaded = viewModel.areSMSLoaded.collectAsState(initial = false).value
-    if (viewModel.onlineMode) {
-        LaunchedEffect(key1 = true) {
-            viewModel.getEmails()
-        }
-        LaunchedEffect(key1 = true) {
-            viewModel.eventFlow.collectLatest { event ->
-                when (event) {
-                    is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            message = event.message
-                        )
-                    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getEmails()
+    }
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is TrackShipmentViewModel.UIEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
                 }
             }
         }
-    } else {
-        LaunchedEffect(key1 = true) {
-            viewModel.fetchSMS()
-        }
+    }
 
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 40.dp)
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 40.dp)
+                .fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
 
-                Column(modifier = Modifier) {
+            Column(modifier = Modifier) {
+                Text(
+                    text = "Hi, Friend", color = Color.LightGray, fontFamily = LatoLightItalic,
+                    modifier = Modifier.padding(start = 25.dp, top = 30.dp),
+                    fontSize = 28.sp,
+                )
+
+                Box(modifier = Modifier) {
                     Text(
-                        text = "Hi, Friend", color = Color.LightGray, fontFamily = LatoLightItalic,
-                        modifier = Modifier.padding(start = 25.dp, top = 30.dp),
-                        fontSize = 28.sp,
-                    )
-
-                    Box(modifier = Modifier) {
-                        Text(
-                            text = if (viewModel.onlineMode) viewModel.userName
-                            else "Offline User",
-                            color = Color.Black, fontFamily = Lato,
-                            fontWeight = FontWeight.Bold,
-
-                            modifier = Modifier.padding(start = 30.dp, bottom = 20.dp),
-                            fontSize = 26.sp
-                        )
-
-                        Button(
-                            onClick = { GlobalScope.launch(Dispatchers.IO) { viewModel.getEmails() } },
-                            modifier = Modifier
-                                .padding(start = 300.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Transparent,
-                                disabledBackgroundColor = Color.Transparent,
-
-                            ),
-                            elevation = null
-                        ) {
-                            Image(
-                                painter = painterResource(
-                                    if (viewModel.onlineMode) R.drawable.ic_refresh
-                                    else R.drawable.offbutt_removebg_preview
-                                ),
-                                contentDescription = "refresh",
-                                modifier = if (viewModel.onlineMode) Modifier.background(Color.Transparent)
-                                else Modifier
-                                    .background(Color.Transparent)
-                                    .size(50.dp)
-                            )
-                        }
-                    }
-
-                    Divider(
-                        color = Color.LightGray,
-                        thickness = 2.dp,
-                        startIndent = 25.dp,
-                        modifier = Modifier.padding(end = 25.dp, bottom = 30.dp)
-                    )
-                    Text(
-                        text = "Shipments",
-                        modifier = Modifier.padding(start = 124.dp),
-                        fontFamily = Lato,
+                        text = if (viewModel.onlineMode) viewModel.userName
+                        else "Offline User",
+                        color = Color.Black, fontFamily = Lato,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 28.sp
+
+                        modifier = Modifier.padding(start = 30.dp, bottom = 20.dp),
+                        fontSize = 26.sp
                     )
-                    if (viewModel.onlineMode) {
-                        Scaffold(scaffoldState = scaffoldState) {
-                            if (!state.loading) {
-                                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                                    for (i in 0 until state.interestingEmail.size) {
-                                        Log.i(
-                                            "RENDER NO $i",
-                                            "Total ${state.interestingEmail.size}"
-                                        )
-                                        ShipmentItem(
-                                            providerName = state.interestingEmail[i].sentFrom,
-                                            trackingLink = state.interestingEmail[i].trackingLink,
-                                            estimatedDateOfDelivery = null ?: "N/A"
-                                        )
-                                    }
-                                }
-                            } else {
-                                val composition by rememberLottieComposition(
-                                    LottieCompositionSpec
-                                        .RawRes(R.raw.loading)
-                                )
-                                val progress by animateLottieCompositionAsState(
-                                    composition,
 
-                                    iterations = LottieConstants.IterateForever,
-                                    isPlaying = true,
-                                    speed = .5f,
-                                    ignoreSystemAnimatorScale = true
+                    Button(
+                        onClick = { GlobalScope.launch(Dispatchers.IO) { viewModel.getEmails() } },
+                        modifier = Modifier
+                            .padding(start = 300.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Transparent,
+                            disabledBackgroundColor = Color.Transparent,
 
+                        ),
+                        elevation = null
+                    ) {
+                        Image(
+                            painter = painterResource(
+                                if (viewModel.onlineMode) R.drawable.ic_refresh
+                                else R.drawable.offbutt_removebg_preview
+                            ),
+                            contentDescription = "refresh",
+                            modifier = if (viewModel.onlineMode) Modifier.background(Color.Transparent)
+                            else Modifier
+                                .background(Color.Transparent)
+                                .size(50.dp)
+                        )
+                    }
+                }
+
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 2.dp,
+                    startIndent = 25.dp,
+                    modifier = Modifier.padding(end = 25.dp, bottom = 30.dp)
+                )
+                Text(
+                    text = "Shipments",
+                    modifier = Modifier.padding(start = 124.dp),
+                    fontFamily = Lato,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp
+                )
+
+                Scaffold(scaffoldState = scaffoldState) {
+                    if (!state.loading) {
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            for (i in 0 until state.interestingEmail.size) {
+                                Log.i(
+                                    "RENDER NO $i",
+                                    "Total ${state.interestingEmail.size}"
                                 )
-                                LottieAnimation(
-                                    composition = composition,
-                                    progress = progress,
-                                    modifier = Modifier.fillMaxSize()
+                                ShipmentItem(
+                                    providerName = state.interestingEmail[i].sentFrom,
+                                    trackingLink = state.interestingEmail[i].trackingLink,
+                                    estimatedDateOfDelivery = null ?: "N/A"
                                 )
                             }
                         }
                     } else {
-                        if (!viewModel.onlineMode && issmsloaded) {
-                            Log.i("info", "${viewModel.smsList.size}")
+                        val composition by rememberLottieComposition(
+                            LottieCompositionSpec
+                                .RawRes(R.raw.loading)
+                        )
+                        val progress by animateLottieCompositionAsState(
+                            composition,
 
-                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                                for (
-                                    i in 0 until viewModel.smsList.size
-                                ) {
-                                    Log.e(
-                                        "RENDER NO $i",
-                                        "Total ${viewModel.smsList.size}"
-                                    )
-                                    ShipmentItem(
-                                        providerName = viewModel.smsList.elementAt(i).smsAddress,
-                                        trackingLink = viewModel.smsList.elementAt(i).smsTrackLink,
-                                        estimatedDateOfDelivery = null ?: "N/A"
-                                    )
-                                }
-                            }
-                        } else {
-                            val composition by rememberLottieComposition(
-                                LottieCompositionSpec
-                                    .RawRes(R.raw.loading)
-                            )
-                            val progress by animateLottieCompositionAsState(
-                                composition,
+                            iterations = LottieConstants.IterateForever,
+                            isPlaying = true,
+                            speed = .5f,
+                            ignoreSystemAnimatorScale = true
 
-                                iterations = LottieConstants.IterateForever,
-                                isPlaying = true,
-                                speed = .5f,
-                                ignoreSystemAnimatorScale = true
-
-                            )
-                            LottieAnimation(
-                                composition = composition,
-                                progress = progress,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        )
+                        LottieAnimation(
+                            composition = composition,
+                            progress = progress,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
                 }
             }

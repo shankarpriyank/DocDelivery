@@ -2,6 +2,7 @@ package com.priyank.drdelivery
 
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.navigation.Screen
+import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
 import com.priyank.drdelivery.utils.TestDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -18,11 +19,12 @@ class SplashScreenViewModelTest {
     val testDispatcherRule = TestDispatcherRule()
 
     private val userDetails: UserDetails = mockk(relaxed = true)
+    private val perDetails: PerDetails = mockk(relaxed = true)
 
     @Test
     fun `on init with user logged in, should update start destination state to screen detail`() = runTest {
         coEvery { userDetails.isLoggedIn() } returns true
-        val viewModel = SplashScreenViewModel(userDetails)
+        val viewModel = SplashScreenViewModel(userDetails, perDetails)
         assertEquals(Screen.Detail.route, viewModel.startDestination.value)
         assertFalse(viewModel.showSplashScreen.value)
     }
@@ -30,7 +32,7 @@ class SplashScreenViewModelTest {
     @Test
     fun `on init with user logged in, should update start destination state to screen authentication`() = runTest {
         coEvery { userDetails.isLoggedIn() } returns false
-        val viewModel = SplashScreenViewModel(userDetails)
+        val viewModel = SplashScreenViewModel(userDetails, perDetails)
         assertEquals(Screen.Authentication.route, viewModel.startDestination.value)
         assertFalse(viewModel.showSplashScreen.value)
     }

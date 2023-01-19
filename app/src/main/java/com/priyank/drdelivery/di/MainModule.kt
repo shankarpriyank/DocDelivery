@@ -77,9 +77,11 @@ object MainModule {
     @Singleton
     fun provideWordInfoRepository(
         db: EmailDatabase,
-        api: GetEmails
+        api: GetEmails,
+        userDetails: UserDetails,
+        @ApplicationContext context: Context
     ): EmailRepository {
-        return EmailRepositoryImpl(db.emailDao, api)
+        return EmailRepositoryImpl(db.emailDao, api, userDetails, provideGetSMS(context))
     }
 
     @Provides

@@ -11,8 +11,8 @@ class PerDetails(private val sharedPreferences: SharedPreferences) {
         onlySignIn: Boolean,
         bothPer: Boolean
     ) = with(sharedPreferences.edit()) {
-        putBoolean("userId", onlySMS)
-        putBoolean("userName", onlySignIn)
+        putBoolean("SMSPer", onlySMS)
+        putBoolean("SignInPer", onlySignIn)
         putBoolean("BothPer", bothPer)
         apply()
     }

@@ -24,7 +24,7 @@ class GetSMS(private val context: Context) {
 
         // Iterate over the cursor and print out the SMS messages
         while (cursor!!.moveToNext()) {
-            val id = cursor.getInt(0)
+            val id = cursor.getString(0)
             val address = cursor.getString(1)
             val body = cursor.getString(3)
             val date = cursor.getLong(2)
