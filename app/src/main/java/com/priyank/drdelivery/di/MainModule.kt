@@ -89,6 +89,6 @@ object MainModule {
     fun provideWordInfoDatabase(app: Application): EmailDatabase {
         return Room.databaseBuilder(
             app, EmailDatabase::class.java, "email_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 }

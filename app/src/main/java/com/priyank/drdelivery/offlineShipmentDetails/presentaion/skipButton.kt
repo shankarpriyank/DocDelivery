@@ -4,9 +4,9 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.priyank.drdelivery.navigation.Screen
+import com.priyank.drdelivery.ui.theme.LightBlue
 
 @Composable
 fun SkipButton(
@@ -18,7 +18,7 @@ fun SkipButton(
             onClick()
             navHostController.navigate(Screen.Detail.route)
         },
-        colors = ButtonDefaults.textButtonColors(contentColor = Color.LightGray)
+        colors = ButtonDefaults.textButtonColors(contentColor = LightBlue)
     ) {
         Text("Skip")
     }

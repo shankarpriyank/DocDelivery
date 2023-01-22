@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class InterestingEmail(
+data class InterestingLink(
     @PrimaryKey
     val id: String,
     val trackingLink: String,

@@ -5,7 +5,7 @@ import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
 import com.priyank.drdelivery.shipmentDetails.data.local.InteresingEmailDao
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
 import com.priyank.drdelivery.shipmentDetails.domain.ParseEmail
-import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingEmail
+import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingLink
 import com.priyank.drdelivery.shipmentDetails.domain.repository.EmailRepository
 import com.priyank.drdelivery.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ constructor(
     private val GetSMS: GetSMS,
 ) : EmailRepository {
     val onlineMode = userDetails.isLoggedIn()
-    override fun getEmails(): Flow<Resource<List<InterestingEmail>>> {
+    override fun getEmails(): Flow<Resource<List<InterestingLink>>> {
         return flow {
             emit(Resource.Loading())
             val interestingEmails = emailDao.getEmails()
@@ -40,7 +40,7 @@ constructor(
                 } else {
                     val sms = GetSMS.getSMS()
                     for (i in sms.indices) {
-                        val interestingLink = InterestingEmail(
+                        val interestingLink = InterestingLink(
                             sms.elementAt(i).smsId,
                             sms.elementAt(i).smsTrackLink,
                             sms.elementAt(i).smsAddress,

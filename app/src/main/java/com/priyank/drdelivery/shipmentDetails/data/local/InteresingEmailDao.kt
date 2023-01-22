@@ -4,14 +4,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingEmail
+import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingLink
 
 @Dao
 interface InteresingEmailDao {
 
-    @Query("SELECT * FROM interestingemail")
-    suspend fun getEmails(): List<InterestingEmail>
+    @Query("SELECT * FROM interestinglink")
+    suspend fun getEmails(): List<InterestingLink>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEmail(email: InterestingEmail)
+    suspend fun insertEmail(email: InterestingLink)
 }

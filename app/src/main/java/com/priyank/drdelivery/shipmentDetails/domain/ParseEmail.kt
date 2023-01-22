@@ -5,7 +5,7 @@ import com.google.api.client.util.Base64
 import com.google.api.client.util.StringUtils
 import com.google.api.services.gmail.model.Message
 import com.google.api.services.gmail.model.MessagePart
-import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingEmail
+import com.priyank.drdelivery.shipmentDetails.domain.model.InterestingLink
 import java.util.Date
 
 class ParseEmail() {
@@ -36,7 +36,7 @@ class ParseEmail() {
         return result
     }
 
-    fun parseEmail(email: Message): InterestingEmail? {
+    fun parseEmail(email: Message): InterestingLink? {
 
         val emailSize = email.payload.parts?.size ?: 0
         var parsedEmail = " "
@@ -53,7 +53,7 @@ class ParseEmail() {
 
             Log.d("EMAIL ${timeEmailWasRecieved(email)}", parsedEmail)
 
-            return InterestingEmail(
+            return InterestingLink(
                 email.id,
                 FlipkartPattern.find(parsedEmail)!!.value,
                 "Flipkart",

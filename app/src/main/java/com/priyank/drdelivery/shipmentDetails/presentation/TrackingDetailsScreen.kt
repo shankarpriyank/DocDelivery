@@ -137,14 +137,14 @@ fun TrackingDetailScreen(
                 Scaffold(scaffoldState = scaffoldState) {
                     if (!state.loading) {
                         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            for (i in 0 until state.interestingEmail.size) {
+                            for (i in 0 until state.interestingLink.size) {
                                 Log.i(
                                     "RENDER NO $i",
-                                    "Total ${state.interestingEmail.size}"
+                                    "Total ${state.interestingLink.size}"
                                 )
                                 ShipmentItem(
-                                    providerName = state.interestingEmail[i].sentFrom,
-                                    trackingLink = state.interestingEmail[i].trackingLink,
+                                    providerName = state.interestingLink[i].sentFrom,
+                                    trackingLink = state.interestingLink[i].trackingLink,
                                     estimatedDateOfDelivery = null ?: "N/A"
                                 )
                             }
