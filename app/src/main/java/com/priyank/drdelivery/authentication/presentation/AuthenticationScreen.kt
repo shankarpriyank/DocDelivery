@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,27 +49,9 @@ fun AuthenticationScreen(
     navHostController: NavHostController
 
 ) {
-    var isSignInChosen by remember { mutableStateOf(false) }
-    var isOfflineChosen by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
-    fun onSignInChosen() {
-        isSignInChosen = true
-    }
-
-    fun onOfflineChosen() {
-        isOfflineChosen = true
-    }
-
-    var isDialogShow by remember { mutableStateOf(false) }
-    fun onDismiss() {
-        isDialogShow = false
-    }
-
-    fun onClick() {
-        isDialogShow = true
-    }
-
-    val activity = LocalContext.current as Activity
+    val activity = context as Activity
     val signInRequestCode = 1
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
@@ -85,10 +65,10 @@ fun AuthenticationScreen(
                         name = gsa.displayName,
                         profilePhotoUrl = gsa.photoUrl.toString(),
                         navHostController = navHostController,
-                        screen = isOfflineChosen
+                        screen = viewModel.isOfflineChosen.value
                     )
-                    if (!isOfflineChosen && !isSignInChosen) {
-                        onSignInChosen()
+                    if (!viewModel.isOfflineChosen.value && !viewModel.isSignInChosen.value) {
+                        viewModel.onSignInChosen()
                     }
                 } else {
                     Log.e("Login Failed", "Error")
@@ -136,7 +116,7 @@ fun AuthenticationScreen(
                 }
             }
         }
-        if (!isOfflineChosen && !isSignInChosen) {
+        if (!viewModel.isOfflineChosen.value && !viewModel.isSignInChosen.value) {
             SignInButton(
                 modifier = Modifier.padding(vertical = 16.dp),
                 text = "Sign in with Google",
@@ -148,27 +128,36 @@ fun AuthenticationScreen(
                 },
             )
         }
-        if (!isOfflineChosen && !isSignInChosen) {
+        if (!viewModel.isOfflineChosen.value && !viewModel.isSignInChosen.value) {
             OfflineButton {
-                onClick()
+                viewModel.onClick()
                 when (PackageManager.PERMISSION_GRANTED) {
                     ContextCompat.checkSelfPermission(
                         context,
                         Manifest.permission.READ_SMS
                     ) -> {
-                        onOfflineChosen()
+                        viewModel.onOfflineChosen()
                     }
                     else -> {}
                 }
             }
             Spacer(modifier = Modifier.height(18.dp))
         }
-        if (isDialogShow) {
+        if (viewModel.isDialogShow.value) {
             SMSPermissionScreen(
-                { onDismiss() }, navHostController, activity, isSignInChosen
+                { viewModel.onDismiss() }, navHostController, activity, viewModel.isSignInChosen.value
             )
+            when (PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_SMS
+                ) -> {
+                    viewModel.onOfflineChosen()
+                }
+                else -> {}
+            }
         }
-        if (isOfflineChosen) {
+        if (viewModel.isOfflineChosen.value) {
             SignInButton(
                 modifier = Modifier.padding(vertical = 16.dp),
                 text = "Sign in with Google",
@@ -183,9 +172,9 @@ fun AuthenticationScreen(
             SkipButton(navHostController) { viewModel.updateUserPer(true, false, false) }
         }
 
-        if (isSignInChosen) {
+        if (viewModel.isSignInChosen.value) {
             OfflineButton {
-                onClick()
+                viewModel.onClick()
                 viewModel.updateUserPer(false, false, true)
             }
             SkipButton(

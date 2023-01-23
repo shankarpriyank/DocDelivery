@@ -1,6 +1,7 @@
 package com.priyank.drdelivery.authentication
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,8 +18,25 @@ class LoginViewModel @Inject
 constructor(
     private val userDetails: UserDetails,
     private val gsc: GoogleSignInClient,
-    private val userPer: PerDetails
+    private val userPer: PerDetails,
 ) : ViewModel() {
+    var isSignInChosen = mutableStateOf(false)
+    var isOfflineChosen = mutableStateOf(false)
+    var isDialogShow = mutableStateOf(false)
+    fun onSignInChosen() {
+        isSignInChosen.value = true
+    }
+
+    fun onOfflineChosen() {
+        isOfflineChosen.value = true
+    }
+    fun onDismiss() {
+        isDialogShow.value = false
+    }
+
+    fun onClick() {
+        isDialogShow.value = true
+    }
     fun data(): List<Info> {
 
         return listOf(

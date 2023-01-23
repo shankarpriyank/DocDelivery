@@ -43,57 +43,99 @@ fun SMSPermissionScreen(
     val showNewAlert = remember {
         mutableStateOf(false)
     }
-    if (!showNewAlert.value) {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            confirmButton = {
-                TextButton(onClick = {
-                    when (PackageManager.PERMISSION_GRANTED) {
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.READ_SMS
-                        ) -> {
-                            if (screen2) {
-                                navHostController.popBackStack()
-                                navHostController.navigate(Screen.Detail.route)
-                            } else {
-                                onDismiss()
-                                Toast.makeText(
-                                    context,
-                                    "SMS permission granted",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+    when (PackageManager.PERMISSION_GRANTED) {
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_SMS
+        ) -> {
+            if (screen2) {
+                navHostController.popBackStack()
+                navHostController.navigate(Screen.Detail.route)
+            } else {
+                onDismiss()
+                Toast.makeText(
+                    context,
+                    "SMS permission granted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
-                        else -> {
-                            // Asking for permission
-                            launcher.launch(Manifest.permission.READ_SMS)
-                            if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                                    activity,
+        else -> {
+            if (!showNewAlert.value) {
+                AlertDialog(
+                    onDismissRequest = { onDismiss() },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            when (PackageManager.PERMISSION_GRANTED) {
+                                ContextCompat.checkSelfPermission(
+                                    context,
                                     Manifest.permission.READ_SMS
-                                ) && count.value > 0
-                            ) {
-                                // The permission has been permanently denied by the user
-                                showNewAlert.value = true
+                                ) -> {
+                                    if (screen2) {
+                                        navHostController.popBackStack()
+                                        navHostController.navigate(Screen.Detail.route)
+                                    } else {
+                                        onDismiss()
+                                        Toast.makeText(
+                                            context,
+                                            "SMS permission granted",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+
+                                else -> {
+                                    // Asking for permission
+                                    launcher.launch(Manifest.permission.READ_SMS)
+
+                                    when (PackageManager.PERMISSION_GRANTED) {
+                                        ContextCompat.checkSelfPermission(
+                                            context,
+                                            Manifest.permission.READ_SMS
+                                        ) -> {
+                                            if (screen2) {
+                                                navHostController.popBackStack()
+                                                navHostController.navigate(Screen.Detail.route)
+                                            } else {
+                                                onDismiss()
+                                                Toast.makeText(
+                                                    context,
+                                                    "SMS permission granted",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                        else -> {
+                                            if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                                                    activity,
+                                                    Manifest.permission.READ_SMS
+                                                ) && count.value > 0
+                                            ) {
+                                                // The permission has been permanently denied by the user
+                                                showNewAlert.value = true
+                                            }
+                                            count.value++
+                                        }
+                                    }
+                                }
                             }
-                            count.value++
+                        }) { Text(text = "OK", color = Color(176, 221, 249)) }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = onDismiss) {
+                            Text(
+                                text = "Cancel",
+                                color = Color(176, 221, 249)
+                            )
                         }
-                    }
-                }) { Text(text = "OK", color = Color(176, 221, 249)) }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(
-                        text = "Cancel",
-                        color = Color(176, 221, 249)
-                    )
-                }
-            },
-            title = { Text(text = "Please confirm") },
-            text = { Text(text = "We are using your SMS details. Do you continue with the requested action?") }
-        )
-    } else {
-        AlertDeniedPer(onDismiss)
+                    },
+                    title = { Text(text = "Please confirm") },
+                    text = { Text(text = "We are using your SMS details. Do you continue with the requested action?") }
+                )
+            } else {
+                AlertDeniedPer(onDismiss)
+            }
+        }
     }
 }
