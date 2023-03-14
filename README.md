@@ -7,14 +7,11 @@ DocDelivery is a package/shipment tracking application that helps the user track
 DocDelivery is built using Kotlin and it leverages Jetpack Compose, Dagger-Hilt, Coroutines etc. It uses Gmail API to fetch the users email.
 For detailed information on how DocDelivery is developed see [development wiki](https://github.com/shankarpriyank/DocDelivery/wiki/Development-Wiki)
 
-## Login UI
-<p align="center"> 
-  <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height="10%" width="30%"  />
-</p> 
+## UI Preview
 
-<!--  <p align="center"> 
-  <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height=400>
-</p> -->
+| Login Screen | Details Screen |
+| ------------- | ------------- |
+|      <img src="https://user-images.githubusercontent.com/100941430/205707074-e4396320-8470-41ff-aaa2-b26ed1f5c1d3.gif" alt="animated " height = "480" width= "200" /> |  <img src = "https://user-images.githubusercontent.com/75121767/224088744-852cb1ea-fc4e-4cf3-85f9-b14fc34a4ee1.gif" alt = "animated"/> |
 
 
 
