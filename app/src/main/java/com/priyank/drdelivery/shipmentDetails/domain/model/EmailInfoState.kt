@@ -1,6 +1,6 @@
 package com.priyank.drdelivery.shipmentDetails.domain.model
 
 data class EmailInfoState(
-    val interestingEmail: List<InterestingEmail> = emptyList(),
+    val interestingLink: List<InterestingLink> = emptyList(),
     val loading: Boolean = true
 )

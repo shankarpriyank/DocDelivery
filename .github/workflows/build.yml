@@ -1,4 +1,4 @@
-name: Build 
+name: Build
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ on:
       - gradle.properties
       - settings.gradle
       - .github/workflows/build.yml
- 
+
 
 jobs:
   test_job:
@@ -56,7 +56,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Run ktlint check
         run: ./gradlew ktlintCheck --continue
 

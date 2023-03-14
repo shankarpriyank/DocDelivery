@@ -6,6 +6,7 @@ import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.data.UserDetails
 import com.priyank.drdelivery.authentication.model.Info
 import com.priyank.drdelivery.navigation.Screen
+import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
 import com.priyank.drdelivery.utils.TestDispatcherRule
 import io.mockk.mockk
 import io.mockk.verify
@@ -21,9 +22,11 @@ class LoginViewModelTest {
 
     private val userDetails: UserDetails = mockk(relaxed = true)
     private val googleSignInClient: GoogleSignInClient = mockk(relaxed = true)
+    private val perDetails: PerDetails = mockk(relaxed = true)
     private val viewModel = LoginViewModel(
         userDetails = userDetails,
         gsc = googleSignInClient,
+        userPer = perDetails,
     )
 
     @Test
@@ -45,6 +48,7 @@ class LoginViewModelTest {
             email = "email",
             profilePhotoUrl = "profile photo url",
             navHostController = navHostController,
+            screen = true
         )
 
         verify {

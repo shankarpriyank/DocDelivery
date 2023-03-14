@@ -11,6 +11,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.priyank.drdelivery.R
 import com.priyank.drdelivery.authentication.data.UserDetails
+import com.priyank.drdelivery.offlineShipmentDetails.data.GetSMS
+import com.priyank.drdelivery.offlineShipmentDetails.data.PerDetails
 import com.priyank.drdelivery.shipmentDetails.data.local.EmailDatabase
 import com.priyank.drdelivery.shipmentDetails.data.remote.GetEmails
 import com.priyank.drdelivery.shipmentDetails.data.repository.EmailRepositoryImpl
@@ -51,6 +53,20 @@ object MainModule {
         // Build a GoogleSignInClient with the options specified by gso.
         return GoogleSignIn.getClient(context, gso)
     }
+
+    @Singleton
+    @Provides
+    fun provideGetSMS(@ApplicationContext context: Context): GetSMS {
+        return GetSMS(context)
+    }
+
+    @Singleton
+    @Provides
+    fun providePerDetails(@ApplicationContext context: Context): PerDetails {
+        val sharedPreferences = context.getSharedPreferences("permissionDetails", MODE_PRIVATE)
+        return PerDetails(sharedPreferences)
+    }
+
     @Provides
     @Singleton
     fun providesGetEmails(gsc: GoogleSignInClient, userDetails: UserDetails): GetEmails {
@@ -61,9 +77,11 @@ object MainModule {
     @Singleton
     fun provideWordInfoRepository(
         db: EmailDatabase,
-        api: GetEmails
+        api: GetEmails,
+        userDetails: UserDetails,
+        @ApplicationContext context: Context
     ): EmailRepository {
-        return EmailRepositoryImpl(db.emailDao, api)
+        return EmailRepositoryImpl(db.emailDao, api, userDetails, provideGetSMS(context))
     }
 
     @Provides
@@ -71,6 +89,6 @@ object MainModule {
     fun provideWordInfoDatabase(app: Application): EmailDatabase {
         return Room.databaseBuilder(
             app, EmailDatabase::class.java, "email_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 }

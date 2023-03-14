@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -36,21 +37,24 @@ import com.priyank.drdelivery.shipmentDetails.TrackShipmentViewModel
 import com.priyank.drdelivery.shipmentDetails.presentation.composables.ShipmentItem
 import com.priyank.drdelivery.ui.theme.Lato
 import com.priyank.drdelivery.ui.theme.LatoLightItalic
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
+fun TrackingDetailScreen(
+    viewModel: TrackShipmentViewModel = hiltViewModel(),
 
+) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
         viewModel.getEmails()
     }
-
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -62,6 +66,7 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,7 +86,9 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
 
                 Box(modifier = Modifier) {
                     Text(
-                        text = viewModel.userName, color = Color.Black, fontFamily = Lato,
+                        text = if (viewModel.onlineMode) viewModel.userName
+                        else "Offline User",
+                        color = Color.Black, fontFamily = Lato,
                         fontWeight = FontWeight.Bold,
 
                         modifier = Modifier.padding(start = 30.dp, bottom = 20.dp),
@@ -100,9 +107,15 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                         elevation = null
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_refresh),
+                            painter = painterResource(
+                                if (viewModel.onlineMode) R.drawable.ic_refresh
+                                else R.drawable.offbutt_removebg_preview
+                            ),
                             contentDescription = "refresh",
-                            modifier = Modifier.background(Color.Transparent)
+                            modifier = if (viewModel.onlineMode) Modifier.background(Color.Transparent)
+                            else Modifier
+                                .background(Color.Transparent)
+                                .size(50.dp)
                         )
                     }
                 }
@@ -120,17 +133,18 @@ fun TrackingDetailScreen(viewModel: TrackShipmentViewModel = hiltViewModel()) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
+
                 Scaffold(scaffoldState = scaffoldState) {
-
                     if (!state.loading) {
-
                         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            for (i in 0 until state.interestingEmail.size) {
-
-                                Log.i("RENDER NO $i", "Total ${state.interestingEmail.size}")
+                            for (i in 0 until state.interestingLink.size) {
+                                Log.i(
+                                    "RENDER NO $i",
+                                    "Total ${state.interestingLink.size}"
+                                )
                                 ShipmentItem(
-                                    providerName = state.interestingEmail[i].sentFrom,
-                                    trackingLink = state.interestingEmail[i].trackingLink,
+                                    providerName = state.interestingLink[i].sentFrom,
+                                    trackingLink = state.interestingLink[i].trackingLink,
                                     estimatedDateOfDelivery = null ?: "N/A"
                                 )
                             }

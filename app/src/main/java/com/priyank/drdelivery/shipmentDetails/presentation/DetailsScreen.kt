@@ -17,27 +17,34 @@ fun Greeting(
     navHostController: NavHostController
 ) {
     val navControllerForBottomNav = rememberNavController()
-
-    Scaffold(bottomBar = {
-        BottomNavigationBar(
-            items = listOf(
-                BottomNavItem(
-                    name = "Home",
-                    route = "tracking detail",
-                    icon = Icons.Outlined.Home
+    val isOnline = viewModel.onlineMode
+    if (isOnline) {
+        Scaffold(bottomBar = {
+            BottomNavigationBar(
+                items = listOf(
+                    BottomNavItem(
+                        name = "Home",
+                        route = "tracking detail",
+                        icon = Icons.Outlined.Home
+                    ),
+                    BottomNavItem(
+                        name = "Profile",
+                        route = "profile",
+                        icon = Icons.Outlined.Person
+                    )
                 ),
-                BottomNavItem(
-                    name = "Profile",
-                    route = "profile",
-                    icon = Icons.Outlined.Person
-                )
-            ),
-            navController = navControllerForBottomNav,
-            onItemClick = {
-                navControllerForBottomNav.navigate(it.route)
-            }
-        )
-    }) {
-        Navigation(navController = navControllerForBottomNav, navControllerforSigningOut = navHostController)
+                navController = navControllerForBottomNav,
+                onItemClick = {
+                    navControllerForBottomNav.navigate(it.route)
+                }
+            )
+        }) {
+            Navigation(
+                navController = navControllerForBottomNav,
+                navControllerforSigningOut = navHostController
+            )
+        }
+    } else {
+        TrackingDetailScreen()
     }
 }

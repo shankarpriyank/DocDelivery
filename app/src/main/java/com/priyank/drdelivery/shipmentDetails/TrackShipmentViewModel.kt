@@ -21,12 +21,12 @@ constructor(
 ) : ViewModel() {
 
     val userName = userDetails.getUserName()!!.substringBefore(" ")
-
     private val _state = mutableStateOf(EmailInfoState())
     val state: State<EmailInfoState> = _state
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+    val onlineMode = userDetails.isLoggedIn()
 
     suspend fun getEmails() {
 
@@ -34,7 +34,7 @@ constructor(
             when (result) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
-                        interestingEmail = result.data ?: emptyList(),
+                        interestingLink = result.data ?: emptyList(),
                         loading = false
                     )
                 }
@@ -44,20 +44,20 @@ constructor(
                         if (result.data.isEmpty()) {
 
                             _state.value = state.value.copy(
-                                interestingEmail = result.data,
+                                interestingLink = result.data,
                                 loading = true
                             )
                         } else {
 
                             _state.value = state.value.copy(
-                                interestingEmail = result.data,
+                                interestingLink = result.data,
                                 loading = false
                             )
                         }
                     } else {
 
                         _state.value = state.value.copy(
-                            interestingEmail = emptyList(),
+                            interestingLink = emptyList(),
                             loading = true
                         )
                     }
@@ -66,7 +66,7 @@ constructor(
                 is Resource.Error -> {
 
                     _state.value = state.value.copy(
-                        interestingEmail = result.data ?: emptyList(),
+                        interestingLink = result.data ?: emptyList(),
                         loading = false
                     )
 

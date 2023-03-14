@@ -3,7 +3,10 @@
   <string name="title_activity_login">LoginActivity</string>
 
   <!--Change this with your API KEY -->
-  <string name="gcp_credentials">73928891209-vdggnngphq6315pfogkq46egi1104f3c.apps.googleusercontent.com</string>
+  <string name="gcp_credentials">${{ secrets.API_KEY }}</string>
   <string name="title_activity_shipment_details">ShipmentDetailsActivity</string>
   <string name="title_activity_main">MainActivity</string>
+  <string name="new_alert_box_title">Important</string>
+  <string name="new_alert_box_content">You will not be able to track your shipments via offline mode because the SMS permission has been permanently denied." +
+                "If you still want to give permission then you can manually grant permission for SMS in the app settings</string>
 </resources>
